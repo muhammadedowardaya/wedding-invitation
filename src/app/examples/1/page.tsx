@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { BiSolidQuoteAltLeft } from 'react-icons/bi';
 
 // Import Swiper React components
@@ -18,11 +18,12 @@ import useWindowSize from '@/components/custom-hook/useWindowSize';
 import Timeline from '@/components/Timeline';
 import Programs from '@/components/Programs';
 
-
 import dynamic from 'next/dynamic';
+import Loading from '@/components/Loading';
 
-const MapInvitation = dynamic(() => import('@/components/MapInvitation'), { ssr: false });
-
+const MapInvitation = dynamic(() => import('@/components/MapInvitation'), {
+	ssr: false,
+});
 
 const events = [
 	{
@@ -115,6 +116,8 @@ type FormData = {
 };
 
 export default function Example1() {
+	const [loading, setLoading] = useState(true);
+
 	const { width } = useWindowSize();
 
 	const [formData, setFormData] = useState<FormData>({
@@ -132,8 +135,46 @@ export default function Example1() {
 		setFormData({ ...formData, [field]: e.target.value });
 	};
 
+	useEffect(() => {
+		const handlePageLoad = () => {
+			const images = Array.from(document.images);
+			let imagesLoaded = 0;
+
+			images.forEach((img) => {
+				if (img.complete) {
+					imagesLoaded += 1;
+				} else {
+					img.onload = () => {
+						imagesLoaded += 1;
+						if (imagesLoaded === images.length) {
+							setLoading(false);
+						}
+					};
+					img.onerror = () => {
+						imagesLoaded += 1;
+						if (imagesLoaded === images.length) {
+							setLoading(false);
+						}
+					};
+				}
+			});
+
+			if (imagesLoaded === images.length) {
+				setLoading(false);
+			}
+		};
+
+		if (document.readyState === 'complete') {
+			handlePageLoad();
+		} else {
+			window.addEventListener('load', handlePageLoad);
+			return () => window.removeEventListener('load', handlePageLoad);
+		}
+	}, []);
+
 	return (
 		<div className="font-poppins relative overflow-x-hidden">
+            {loading && <Loading />}
 			<header className="bg-[#a8c5c9] relative h-max pb-4 xs:pb-20 md:h-[700px] lg:h-[760px] 2xl:h-[820px]">
 				<nav className="flex justify-center text-white font-semibold py-1 sm:py-4 z-20">
 					<ul className="flex items-center gap-x-4">
@@ -204,6 +245,7 @@ export default function Example1() {
 							fill
 							sizes="100%"
 							objectFit="cover"
+                            priority
 							style={{
 								objectPosition: '50% 20%',
 								clipPath: `${
@@ -277,6 +319,7 @@ export default function Example1() {
 							fill
 							sizes="100%"
 							objectFit="cover"
+                            priority
 						/>
 					</div>
 				</div>
@@ -294,6 +337,7 @@ export default function Example1() {
 							fill
 							sizes="100%"
 							objectFit="cover"
+                            priority
 						/>
 					</div>
 				</div>
@@ -570,9 +614,7 @@ export default function Example1() {
 				</h2>
 			</section>
 			<section id="location">
-				<MapInvitation
-					targetLocation={[-6.655007, 106.710826]}
-				/>
+				<MapInvitation targetLocation={[-6.655007, 106.710826]} />
 			</section>
 			<footer className="p-8 flex justify-center items-center">
 				<div className="text-center mx-auto font-bold flex flex-col justify-center">

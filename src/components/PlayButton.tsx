@@ -29,18 +29,9 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 
 		audioRef.current.addEventListener('ended', handleAudioEnd);
 
-		const autoPlay = setTimeout(() => {
-            if (playRef.current) {
-                playRef.current.click();
-            }
-            if (scrollRef.current) {
-                scrollRef.current.click();
-            }
-        }, 2000);
-
 		return () => {
 			audioRef.current?.removeEventListener('ended', handleAudioEnd);
-            clearTimeout(autoPlay);
+			
 		};
 	}, [audioFile]);
 

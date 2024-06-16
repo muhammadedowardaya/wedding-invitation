@@ -35,6 +35,7 @@ const ProgramItem = ({
 						fill
 						sizes="100%"
 						style={{ objectFit: 'cover', objectPosition: 'top center' }}
+                        priority
 					/>
 					<div className="relative flex justify-center items-center -bottom-[12.6rem] md:-right-20 lg:-bottom-[15.1rem] lg:-right-28 xl:-right-36 2xl:-right-48">
 						{/* <div
@@ -88,6 +89,7 @@ const ProgramItem = ({
 						fill
 						sizes="100%"
 						style={{ objectFit: 'cover', objectPosition: 'top center' }}
+                        priority
 					/>
 					<div className="relative hidden xs:flex justify-center items-center -bottom-[13rem] left-[30%] md:-right-28">
 						{/* <div

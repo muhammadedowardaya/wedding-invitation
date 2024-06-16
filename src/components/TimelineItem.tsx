@@ -51,6 +51,7 @@ const TimelineItem = ({
 								fill
 								sizes="100%"
 								style={{ objectFit: 'cover', objectPosition: 'top center' }}
+                                priority
 							/>
 						</div>
 					</>
@@ -68,6 +69,7 @@ const TimelineItem = ({
 								fill
 								sizes="100%"
 								style={{ objectFit: 'cover', objectPosition: 'top center' }}
+                                priority
 							/>
 						</div>
 						<div className="relative w-10 h-10 flex justify-center items-center">
@@ -108,6 +110,7 @@ const TimelineItem = ({
 						fill
 						sizes="100%"
 						style={{ objectFit: 'cover', objectPosition: 'top center' }}
+                        priority
 					/>
 				</div>
 			</div>
