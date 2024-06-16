@@ -1,0 +1,639 @@
+'use client';
+
+import Programs from '@/components/Programs';
+import Timeline from '@/components/Timeline';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useState } from 'react';
+import { BiSolidQuoteAltLeft } from 'react-icons/bi';
+
+// for maps
+import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
+import '@/../leaflet/dist/leaflet.css';
+import L from 'leaflet';
+import '@/styles/customIconMap.css';
+import useWindowSize from '@/components/custom-hook/useWindowSize';
+
+const customIcon = L.divIcon({
+	className: 'custom-marker-wrapper',
+	html: `
+      <div class="custom-marker">
+        <div class="marker-image" style="background-image: url('/assets/my-photo.jpg');"></div>
+      </div>
+      <div class="marker-tip"></div>
+    `,
+	iconSize: [50, 70], // ukuran keseluruhan icon (termasuk tanda mengerucut)
+	iconAnchor: [25, 70], // titik anchor icon (tengah bawah)
+	popupAnchor: [0, -70], // titik anchor popup (di atas icon)
+});
+
+// Import Swiper React components
+import { Swiper, SwiperSlide } from 'swiper/react';
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/free-mode';
+import 'swiper/css/scrollbar';
+// import required modules
+import { FreeMode, Scrollbar, Mousewheel } from 'swiper/modules';
+import { FaPlay } from 'react-icons/fa';
+import PlayButton from '@/components/PlayButton';
+
+const events = [
+	{
+		date: '29 March 2022',
+		description: 'We first met in New York City',
+		imageUrl: '/couple-images/couple-1.jpg',
+	},
+	{
+		date: '15 April 2022',
+		description: 'Our first date',
+		imageUrl: '/couple-images/couple-2.jpg',
+	},
+	{
+		date: '30 June 2022',
+		description: 'We traveled to Paris',
+		imageUrl: '/couple-images/couple-1.jpg',
+	},
+	{
+		date: '10 October 2022',
+		description: 'We got engaged',
+		imageUrl: '/couple-images/couple-2.jpg',
+	},
+	{
+		date: '25 December 2022',
+		description: 'We celebrated Christmas together',
+		imageUrl: '/couple-images/couple-1.jpg',
+	},
+];
+
+const programs = [
+	{
+		title: 'Ceremony',
+		time: '12:00 AM',
+		description:
+			'1 Pico Blvd, Santa Monica, CA 90405 1 Pico Blvd, Santa Monica, CA 90405 1 Pico Blvd, Santa Monica, CA 90405',
+		imageUrl: '/couple-images/couple-1.jpg',
+	},
+	{
+		title: 'Wedding lunch',
+		time: '14:00 PM',
+		description: '415 Pacific Coast Hwy, Santa Monica, CA 90402',
+		imageUrl: '/couple-images/couple-2.jpg',
+	},
+	{
+		title: 'Cocktail party',
+		time: '16:00 PM',
+		description: '415 Pacific Coast Hwy, Santa Monica, CA 90402',
+		imageUrl: '/couple-images/couple-1.jpg',
+	},
+	{
+		title: 'Cake cutting',
+		time: '18:00 PM',
+		description: '415 Pacific Coast Hwy, Santa Monica, CA 90402',
+		imageUrl: '/couple-images/couple-2.jpg',
+	},
+];
+
+type FormData = {
+	name: string;
+	attendance: string;
+	message: string;
+};
+
+export default function Example1() {
+	const { width } = useWindowSize();
+	const [userLocation, setUserLocation] = useState<[number, number] | null>(
+		null
+	);
+	const targetLocation: [number, number] = [-6.655007, 106.710826]; // Lokasi tujuan pada peta
+
+	const handleGetRoute = () => {
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition((position) => {
+				const { latitude, longitude } = position.coords;
+				setUserLocation([latitude, longitude]);
+				const url = `https://www.google.com/maps/dir/?api=1&origin=${latitude},${longitude}&destination=${targetLocation[0]},${targetLocation[1]}&travelmode=driving`;
+				window.open(url, '_blank');
+			});
+		} else {
+			alert('Geolocation is not supported by this browser.');
+		}
+	};
+
+	const [formData, setFormData] = useState<FormData>({
+		name: '',
+		attendance: '',
+		message: '',
+	});
+
+	const [isFocused, setIsFocused] = useState(false);
+
+	const handleChange = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+		field: keyof FormData
+	) => {
+		setFormData({ ...formData, [field]: e.target.value });
+	};
+
+	const handlePlayButtonClick = () => {};
+	const handleUpButtonClick = () => {};
+	const handleDownButtonClick = () => {};
+
+	return (
+		<div className="font-poppins relative overflow-x-hidden">
+			<header className="bg-[#a8c5c9] relative h-max pb-4 xs:pb-20 md:h-[700px] lg:h-[760px] 2xl:h-[820px]">
+				<nav className="flex justify-center text-white font-semibold py-1 sm:py-4 z-20">
+					<ul className="flex items-center gap-x-4">
+						<li className="hidden sm:block">
+							<Link href="#date" className="block px-4 py-1">
+								Date
+							</Link>
+						</li>
+						<li className="hidden sm:block">
+							<Link href="#about-us" className="block px-4 py-1">
+								About Us
+							</Link>
+						</li>
+						<li className="hidden sm:block">
+							<Link href="#love-story" className="block px-4 py-1">
+								Love Story
+							</Link>
+						</li>
+						<li className="block sm:hidden lg:block">
+							<Link
+								href="#our"
+								className="flex flex-col items-center px-8 py-1 font-great-vibes text-gray-700"
+							>
+								<div className="relative w-5 h-5 xs:w-10 xs:h-10">
+									<Image
+										src="/icons/leaf.svg"
+										alt="leaf icon"
+										fill
+										sizes="100%"
+										className="-rotate-[65deg] w-auto h-auto"
+									/>
+								</div>
+								<div className="text-sm sm:text-xl font-bold flex items-center gap-x-2">
+									E <span className="text-sm">&</span> M
+								</div>
+							</Link>
+						</li>
+						<li className="hidden sm:block">
+							<Link href="#program" className="block px-4 py-1">
+								Program
+							</Link>
+						</li>
+						<li className="hidden sm:block">
+							<Link href="#contact" className="block px-4 py-1">
+								Contact
+							</Link>
+						</li>
+						<li className="hidden sm:block">
+							<Link href="#location" className="block px-4 py-1">
+								Location
+							</Link>
+						</li>
+					</ul>
+				</nav>
+				<section className="z-10 text-white flex flex-col items-center justify-center pt-5 xs:pt-10 md:pt-20 md:pb-80">
+					<h1 className="text-center text-sm xs:text-3xl md:text-5xl lg:text-6xl xl:text-7xl md:px-10 font-bold flex flex-col items-center w-[80%] md:w-[90%] px-8 gap-x-2 mb-4">
+						<p>Muhammad Edo Wardaya</p>
+						<p className="py-2">&</p>
+						<p>Tri Meliana Sari</p>
+					</h1>
+					<p className="font-dancing-script text-sm xs:text-3xl md:text-4xl lg:text-5xl xl:text-6xl">
+						are getting married
+					</p>
+					<div className="relative mt-2 xs:mt-10 border-none md:border-4 w-20 h-20 xs:w-52 xs:h-52 sm:w-72 sm:h-72 md:w-[600px] md:h-[380px] lg:w-[700px] lg:h-[380px] 2xl:w-[800px] 2xl:h-[450px] border-white md:bg-slate-600">
+						<Image
+							src="/couple-images/couple-1.jpg"
+							alt="wedding invitation"
+							fill
+							sizes="100%"
+							objectFit="cover"
+							style={{
+								objectPosition: '50% 20%',
+								clipPath: `${
+									width >= 768
+										? ''
+										: 'polygon(50% 10%, 70% 0, 90% 5%, 100% 25%, 95% 45%, 50% 100%, 5% 45%, 0 25%, 10% 5%, 30% 0)'
+								}`,
+							}}
+						/>
+					</div>
+				</section>
+			</header>
+			<section
+				id="date"
+				className="text-center pt-8 px-10 pb-8 md:pt-40 md:pb-20 lg:pb-40 lg:pt-48 xl:pt-52 2xl:pt-56  flex flex-col items-center text-[#6c8ca3]"
+			>
+				<div className="">
+					<h2 className="text-base xs:text-3xl md:text-5xl lg:text-6xl font-bold">
+						20 July 2024
+					</h2>
+					<p className="mt-2 font-dancing-script text-sm xs:text-xl md:text-3xl lg:text-4xl text-[#424f5a]">
+						in Santa Monica, California
+					</p>
+					<div className="flex justify-center xs:mt-10">
+						<Image
+							src="/assets/outline-flower.png"
+							alt="outline flower"
+							width={1000}
+							height={20}
+							className="w-[10rem] md:w-[20rem] lg:w-[30rem] mt-2 rotate-180"
+						/>
+					</div>
+					<div className="flex justify-center">
+						<Image
+							src="/assets/save-the-date.png"
+							alt="outline flower"
+							width={1000}
+							height={20}
+							className="w-[10rem] md:w-[15rem] lg:w-[20rem]"
+						/>
+					</div>
+					<div className="flex justify-center">
+						<Image
+							src="/assets/outline-flower.png"
+							alt="outline flower"
+							width={1000}
+							height={20}
+							className="w-[10rem] md:w-[20rem] lg:w-[30rem] mt-2"
+						/>
+					</div>
+				</div>
+			</section>
+			<section
+				id="about-us"
+				className="bg-[#edf6f8] relative text-slate-600 grid gap-y-4 xs:gap-y-10 justify-center py-4 xs:py-10 px-4 xs:px-6 lg:py-0 lg:px-0 gap-x-40 md:gap-x-14 lg:gap-x-10 xl:gap-x-16"
+				style={{
+					gridTemplateColumns: `${width >= 1024 ? 'auto auto' : 'auto'}`,
+				}}
+			>
+				<div className="w-full mx-auto md:ml-auto sm:w-96 md:w-[400px] lg:relative 2xl:w-[500px] -bottom-20 flex flex-col gap-y-2 xs:gap-y-4">
+					<h3 className="font-dancing-script text-slate-800 text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl">
+						M Edo Wardaya
+					</h3>
+					<p className="2xl:text-justify">
+						Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dicta,
+						placeat.
+					</p>
+					<div className="w-full h-24 xs:h-60 2xl:h-80 px-4 xs:border-4 border-white relative">
+						<Image
+							src="/couple-images/couple-1.jpg"
+							alt="ana's photo"
+							fill
+							sizes="100%"
+							objectFit="cover"
+						/>
+					</div>
+				</div>
+				<div className="w-full mx-auto md:mr-auto sm:w-96 md:w-[400px] 2xl:w-[500px] lg:relative -top-20 flex flex-col gap-y-2 xs:gap-y-4">
+					<h3 className="font-dancing-script text-slate-800 lg:order-2 text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl">
+						Tri Meliana Sari
+					</h3>
+					<p className="lg:order-3 2xl:text-justify">
+						Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto,
+						nostrum.
+					</p>
+					<div className="w-full h-24 xs:h-60 2xl:h-80 px-4 xs:border-4 border-white relative lg:order-1">
+						<Image
+							src="/couple-images/couple-1.jpg"
+							alt="ana's photo"
+							fill
+							sizes="100%"
+							objectFit="cover"
+						/>
+					</div>
+				</div>
+			</section>
+			<section
+				id="love-story"
+				className="py-8 xs:py-16 px-10 md:pt-24 lg:pt-52 lg:pb-16 text-slate-600"
+			>
+				<div className="text-center mb-10 xs:mb-20 md:mb-36">
+					<h2 className="font-bold text-lg xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl mb-2">
+						OUR LOVE STORY
+					</h2>
+					<p className="font-dancing-script text-base xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl">
+						This is how it all started
+					</p>
+				</div>
+				<Timeline events={events} />
+			</section>
+			<section
+				id="program"
+				className="bg-[#edf6f8] text-slate-600 py-8 xs:py-16 md:py-24 lg:py-28 xl:py-36"
+			>
+				<div className="text-center mb-5 xs:mb-10 md:mb-20 lg:mb-32 xl:mb-40">
+					<h2 className="font-bold text-lg xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl mb-2">
+						WEDDING PROGRAM
+					</h2>
+					<p className="font-dancing-script text-base xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl">
+						We planned the day carefully
+					</p>
+				</div>
+				<Programs programs={programs} />
+			</section>
+			<div
+				className="
+                    h-[150px] w-full pl-2 pr-6 pb-6
+                    xs:h-[350px] xs:pb-14 xs:px-14 xs:p-4
+                    sm:px-20 md:pb-20 lg:pb-24 xl:pb-28
+                    md:h-[450px] lg:h-[500px] xl:h-[550px]
+                "
+			>
+				<h2 className="text-center pb-5 xs:pb-8 sm:pb-9 md:pb-10 lg:pb-11 xl:pb-12 pt-5 font-bold text-lg xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl">
+					CATATAN
+				</h2>
+				<Swiper
+					direction={'vertical'}
+					slidesPerView={'auto'}
+					freeMode={true}
+					scrollbar={true}
+					mousewheel={true}
+					modules={[FreeMode, Scrollbar, Mousewheel]}
+					className="!h-full px-2"
+				>
+					<SwiperSlide className="!h-auto p-2">
+						<h1 className="break-words font-bold text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl">
+							TURUT MENGUNDANG
+						</h1>
+						<ul className="list-disc pl-4">
+							<li>Upin</li>
+							<li>Ipin</li>
+							<li>Boboyboy</li>
+							<li>Adudu</li>
+							<li>Kak Ros</li>
+							<li>Tok Dalang</li>
+							<li>Jarjit</li>
+							<li>Squidward</li>
+							<li>Spongebob</li>
+							<li>Patrick</li>
+							<li>Sandy</li>
+							<li>Tn Crab</li>
+							<li>Upin</li>
+							<li>Ipin</li>
+							<li>Boboyboy</li>
+							<li>Adudu</li>
+							<li>Kak Ros</li>
+							<li>Tok Dalang</li>
+							<li>Jarjit</li>
+							<li>Squidward</li>
+							<li>Spongebob</li>
+							<li>Patrick</li>
+							<li>Sandy</li>
+							<li>Tn Crab</li>
+						</ul>
+					</SwiperSlide>
+				</Swiper>
+			</div>
+			{/* form */}
+			<section id="contact" className="pt-14 px-0 xs:px-4 md:p-20">
+				<div className="bg-[#a8c5c9] pt-5 xs:pt-20 md:py-20 relative h-max md:h-[500px]">
+					<h2 className="text-center mx-auto w-[90%] text-base xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold text-white mb-2">
+						KINDLY RESPOND BY MAY
+					</h2>
+					<p className="text-center mx-auto w-[80%] font-dancing-script text-base xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl text-white">
+						Will you share the joy with us?
+					</p>
+					<form
+						action=""
+						className="w-full md:w-[500px] lg:w-[600px] xl:w-[700px] mx-auto bg-white py-8 xs:py-12 px-4 md:px-10 mt-4 xs:mt-20 text-slate-500 relative md:border-b-[6px] border-[#f4e8e3]"
+					>
+						<div className="relative">
+							<label
+								htmlFor="name"
+								className={`transition-all duration-300 absolute ${
+									formData.name || isFocused ? '-top-6 left-0' : '-top-1'
+								}`}
+							>
+								Name
+							</label>
+							<input
+								type="text"
+								id="name"
+								name="name"
+								onChange={(e) => handleChange(e, 'name')}
+								value={formData.name}
+								className="border-b border-[#a8c5c9] w-full focus-visible:outline-none focus-visible:border-b text-slate-400"
+								onFocus={() => setIsFocused(true)}
+								onBlur={() => setIsFocused(false)}
+							/>
+						</div>
+						<div className="mt-5 flex gap-y-2 sm:flex-row flex-wrap gap-x-8">
+							<div className="flex flex-row-reverse gap-x-2 items-center">
+								<label htmlFor="yes">Yes, I will be there</label>
+								<input
+									type="radio"
+									id="yes"
+									name="attendance"
+									value="Yes, I Will be there"
+									onChange={(e) => handleChange(e, 'attendance')}
+									checked={formData.attendance === 'Yes, I Will be there'}
+									className="appearance-none w-5 h-5 rounded-full bg-slate-300 checked:bg-white checked:border-slate-300 checked:border-4"
+								/>
+							</div>
+							<div className="flex flex-row-reverse gap-x-2 items-center">
+								<label htmlFor="no">{`Sorry, I can't come`}</label>
+								<input
+									type="radio"
+									id="no"
+									name="attendance"
+									value="Sorry, I can't come"
+									onChange={(e) => handleChange(e, 'attendance')}
+									checked={formData.attendance === "Sorry, I can't come"}
+									className="appearance-none w-5 h-5 rounded-full bg-slate-300 checked:bg-white checked:border-slate-300 checked:border-4"
+								/>
+							</div>
+						</div>
+						<div className="flex flex-col mt-5">
+							<label htmlFor="message">Message</label>
+							<textarea
+								name="message"
+								id="message"
+								onChange={(e) => handleChange(e, 'message')}
+								value={formData.message}
+								className="resize-none h-14 xs:h-32 sm:h-48 focus-visible:outline-none mt-4 p-1 border border-slate-300"
+							>
+								{formData.message}
+							</textarea>
+						</div>
+						<div className="flex justify-center items-center mt-8">
+							<button
+								type="submit"
+								className="bg-[#e2b2a0] text-white py-1 xs:py-2 lg:py-4 px-8 text-sm xs:text-base sm:text-xl md:text-2xl lg:text-3xl  font-semibold
+                                
+                            "
+							>
+								Send
+							</button>
+						</div>
+					</form>
+				</div>
+				<div className="h-0 md:h-[300px]"></div>
+			</section>
+			<div
+				className="
+                h-[400px] xs:h-[450px] sm:h-[500px] md:h-[550px] lg:h-[600px] xl:h-[650px] w-full pr-6 
+                xs:pr-8 sm:px-16 md:px-28 lg:px-32 xl:px-36 2xl:px-40
+                pb-20 xs:pb-28 lg:pb-32 xl:pb-36 xs:pt-5 sm:pt-10 md:pt-5 lg:pt-20
+            "
+			>
+				<h2 className="text-center p-2 pb-5 xs:pb-7 sm:pb-8 md:pb-9 lg:pb-10 xl:pb-12 font-bold text-lg xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl">
+					PESAN
+				</h2>
+				<Swiper
+					direction={'vertical'}
+					slidesPerView={'auto'}
+					freeMode={true}
+					scrollbar={true}
+					mousewheel={true}
+					modules={[FreeMode, Scrollbar, Mousewheel]}
+					className="!h-full"
+				>
+					<SwiperSlide className="!h-auto pr-2 xs:p-4 !flex !flex-col pb-10 !gap-y-5 md:!gap-y-10">
+						<div className="shadow w-full rounded p-2">
+							<p className="p-1 xs:p-2 lg:py-4 xl:py-5  font-bold text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl">
+								Muhammad Edo Wardaya
+							</p>
+							<hr />
+							<p className="p-1 xs:p-2 lg:py-4 xl:py-5  text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl">
+								Wah selamat ya... semoga menjadi keluarga yang sakinah mawaddah
+								warahmah
+							</p>
+							<hr />
+							<p className="p-1 xs:p-2 lg:py-4 xl:py-5  italic">
+								Yes, I will be there
+							</p>
+						</div>
+						<div className="shadow w-full rounded p-2">
+							<p className="p-1 xs:p-2 lg:py-4 xl:py-5  font-bold text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl">
+								Tri Meliana Sari
+							</p>
+							<hr />
+							<p className="p-1 xs:p-2 lg:py-4 xl:py-5  text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl">
+								Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam
+								debitis facilis laudantium perspiciatis magni molestias
+								aspernatur vitae consequuntur et a!
+							</p>
+							<hr />
+							<p className="p-1 xs:p-2 lg:py-4 xl:py-5  italic">
+								Yes, I will be there
+							</p>
+						</div>
+						<div className="shadow w-full rounded p-2">
+							<p className="p-1 xs:p-2 lg:py-4 xl:py-5  font-bold text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl">
+								Muhammad Yusuf
+							</p>
+							<hr />
+							<p className="p-1 xs:p-2 lg:py-4 xl:py-5  text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl">
+								Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut vel
+								obcaecati officiis quia.
+							</p>
+							<hr />
+							<p className="p-1 xs:p-2 lg:py-4 xl:py-5  italic">
+								Yes, I will be there
+							</p>
+						</div>
+						<div className="shadow w-full rounded p-2">
+							<p className="p-1 xs:p-2 lg:py-4 xl:py-5  font-bold text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl">
+								Ahmad
+							</p>
+							<hr />
+							<p className="p-1 xs:p-2 lg:py-4 xl:py-5  text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl">
+								Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit
+								in sit, ut voluptas molestiae veritatis pariatur blanditiis ipsa
+								enim neque?
+							</p>
+							<hr />
+							<p className="p-1 xs:p-2 lg:py-4 xl:py-5  italic">
+								Yes, I will be there
+							</p>
+						</div>
+						<div className="shadow w-full rounded p-2">
+							<p className="p-1 xs:p-2 lg:py-4 xl:py-5  font-bold text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl">
+								Squidward
+							</p>
+							<hr />
+							<p className="p-1 xs:p-2 lg:py-4 xl:py-5  text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl">
+								Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel
+								consectetur iusto libero, repellendus quis ab impedit tempore.
+								Expedita, reiciendis, aliquid esse facilis eaque consequuntur et
+								doloribus explicabo quod maxime dolorem!
+							</p>
+							<hr />
+							<p className="p-1 xs:p-2 lg:py-4 xl:py-5  italic">
+								Yes, I will be there
+							</p>
+						</div>
+					</SwiperSlide>
+				</Swiper>
+			</div>
+			<section
+				id="quotes"
+				className="relative flex flex-col items-center bg-[#ebf3f6] text-slate-600"
+			>
+				<BiSolidQuoteAltLeft className="absolute -top-5 md:-top-14 text-4xl md:text-8xl " />
+				<h2 className="py-5 md:py-24 px-2 xs:px-8 md:px-20 font-dancing-script text-lg xs:text-2xl text-center w-[90%] sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold">
+					Whatever our souls are made of his and mine are the same
+				</h2>
+			</section>
+			<section
+				id="location"
+				className="h-[190px] xs:h-[300px] sm:h-[500px] md:h-[550px] lg:h-[600px] xl:h-[650px] relative"
+			>
+				<MapContainer
+					center={[-6.655007, 106.710826]}
+					zoom={13}
+					scrollWheelZoom={false}
+					className="h-full"
+					doubleClickZoom={false}
+				>
+					<TileLayer
+						url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+						attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+					/>
+					<Marker position={[-6.655007, 106.710826]} icon={customIcon}>
+						<Popup>
+							A pretty CSS3 popup. <br /> Easily customizable.
+						</Popup>
+					</Marker>
+				</MapContainer>
+				<div className="text-xxs xs:text-base sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl relative left-[50%] translate-x-[-50%] bottom-16 xs:bottom-24 md:bottom-40 bg-white rounded-md w-max flex items-center justify-center gap-x-2 z-[444] border-b border-slate-400 pr-2 xs:pr-4">
+					<button
+						onClick={handleGetRoute}
+						className="flex items-center gap-x-1 xs:gap-x-4"
+					>
+						<div className="relative w-5 h-5 xs:w-10 xs:h-10 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 h:w-24 xl:w-28 xl:h-28">
+							<Image
+								src="/assets/google-maps.svg"
+								alt="maps icon"
+								fill
+								sizes="100%"
+							/>
+						</div>
+						Buka Google Maps
+					</button>
+				</div>
+			</section>
+			<footer className="p-8 flex justify-center items-center">
+				<div className="text-center mx-auto font-bold flex flex-col justify-center">
+					<Image
+						src="/icons/leaf.svg"
+						alt="leaf icon"
+						width={60}
+						height={60}
+						className="-rotate-[65deg] h-auto w-auto"
+					/>
+					<h2 className="font-great-vibes text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl">
+						E & M
+					</h2>
+				</div>
+			</footer>
+			<PlayButton
+				audioFile='/audios/Sheila_On_7_-_Hingga_Ujung_Waktu__Lyrics_(128k).mp3'
+			/>
+		</div>
+	);
+}

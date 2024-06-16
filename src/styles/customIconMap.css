@@ -1,0 +1,103 @@
+.marker-tip {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 30px solid #fff;
+    z-index: -1;
+    position: relative;
+}
+
+.custom-marker-wrapper {
+    position: relative;
+    width: 30px;
+    height: 50px;
+}
+
+.custom-marker .marker-image {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+}
+
+ 
+.custom-marker {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: -15px;
+    left: -5px;
+    border: 2px solid #fff;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    border-radius: 50%;
+    background-color: #fff;
+}
+
+@media (min-width:300px) {
+    .marker-tip {
+        border-left: 20px solid transparent;
+        border-right: 20px solid transparent;
+        border-top: 50px solid #fff;
+    }
+    
+    .custom-marker-wrapper {
+        width: 50px;
+        height: 70px;
+    }
+    
+    .custom-marker {
+        width: 50px;
+        height: 50px;
+        top: -25px;
+    }
+    
+   
+}
+
+@media (min-width:640px) {
+    
+    .custom-marker {
+        top: -30px;
+    }
+    
+   
+}
+
+@media (min-width:760px) {
+    
+    .custom-marker {
+        width: 70px;
+        height: 70px;
+        top: -60px;
+        left: -15px;
+    }
+    
+   
+}
+
+@media (min-width:1024px) {
+    
+    .custom-marker {
+        width: 80px;
+        height: 80px;
+        top: -70px;
+        left: -20px;
+    }
+    
+   
+}
+
+@media (min-width:1280px) {
+    
+    .custom-marker {
+        width: 90px;
+        height: 90px;
+        top: -80px;
+        left: -27px;
+    }
+    
+   
+}
