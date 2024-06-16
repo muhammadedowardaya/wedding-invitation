@@ -29,15 +29,18 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 
 		audioRef.current.addEventListener('ended', handleAudioEnd);
 
-		// if(playRef.current){
-		//     playRef.current.click();
-		// }
-		// if(scrollRef.current){
-		//     scrollRef.current.click();
-		// }
+		const autoPlay = setTimeout(() => {
+            if (playRef.current) {
+                playRef.current.click();
+            }
+            if (scrollRef.current) {
+                scrollRef.current.click();
+            }
+        }, 2000);
 
 		return () => {
 			audioRef.current?.removeEventListener('ended', handleAudioEnd);
+            clearTimeout(autoPlay);
 		};
 	}, [audioFile]);
 
@@ -62,16 +65,16 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 	};
 
 	const startScrolling = (direction: 'up' | 'down') => {
-		const scrollAmount = direction === 'up' ? -50 : 50;
+		const scrollAmount = direction === 'up' ? -100 : 100;
 		scrollIntervalRef.current = setInterval(() => {
 			window.scrollBy({ top: scrollAmount, behavior: 'smooth' });
-		}, 100);
+		}, 50);
 	};
 	const startAutoScrolling = (direction: 'up' | 'down') => {
-		const scrollAmount = direction === 'up' ? -20 : 20;
+		const scrollAmount = direction === 'up' ? -10 : 10;
 		autoScrollIntervalRef.current = setInterval(() => {
 			window.scrollBy({ top: scrollAmount, behavior: 'smooth' });
-		}, 100);
+		}, 10);
 	};
 
 	const stopScrolling = (e: any) => {
