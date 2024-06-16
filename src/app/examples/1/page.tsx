@@ -135,9 +135,7 @@ export default function Example1() {
 		setFormData({ ...formData, [field]: e.target.value });
 	};
 
-	const handlePlayButtonClick = () => {};
-	const handleUpButtonClick = () => {};
-	const handleDownButtonClick = () => {};
+	
 
 	return (
 		<div className="font-poppins relative overflow-x-hidden">
@@ -632,7 +630,7 @@ export default function Example1() {
 				</div>
 			</footer>
 			<PlayButton
-				audioFile='/audios/Sheila_On_7_-_Hingga_Ujung_Waktu__Lyrics_(128k).mp3'
+				audioFile='Sheila_On_7_-_Hingga_Ujung_Waktu__Lyrics_(128k).mp3'
 			/>
 		</div>
 	);

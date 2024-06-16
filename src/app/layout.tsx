@@ -13,7 +13,9 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className='text-xxs xs:text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-2xl overflow-x-hidden'>{children}</body>
+			<body className="text-xxs xs:text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-2xl overflow-x-hidden">
+				{children}
+			</body>
 		</html>
 	);
 }
