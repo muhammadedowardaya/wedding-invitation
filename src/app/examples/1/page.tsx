@@ -136,45 +136,48 @@ export default function Example1() {
 	};
 
 	useEffect(() => {
-		const handlePageLoad = () => {
-			const images = Array.from(document.images);
-			let imagesLoaded = 0;
+		// const handlePageLoad = () => {
+		// 	const images = Array.from(document.images);
+		// 	let imagesLoaded = 0;
 
-			images.forEach((img) => {
-				if (img.complete) {
-					imagesLoaded += 1;
-				} else {
-					img.onload = () => {
-						imagesLoaded += 1;
-						if (imagesLoaded === images.length) {
-							setLoading(false);
-						}
-					};
-					img.onerror = () => {
-						imagesLoaded += 1;
-						if (imagesLoaded === images.length) {
-							setLoading(false);
-						}
-					};
-				}
-			});
+		// 	images.forEach((img) => {
+		// 		if (img.complete) {
+		// 			imagesLoaded += 1;
+		// 		} else {
+		// 			img.onload = () => {
+		// 				imagesLoaded += 1;
+		// 				if (imagesLoaded === images.length) {
+		// 					setLoading(false);
+		// 				}
+		// 			};
+		// 			img.onerror = () => {
+		// 				imagesLoaded += 1;
+		// 				if (imagesLoaded === images.length) {
+		// 					setLoading(false);
+		// 				}
+		// 			};
+		// 		}
+		// 	});
 
-			if (imagesLoaded === images.length) {
-				setLoading(false);
-			}
-		};
+		// 	if (imagesLoaded === images.length) {
+		// 		setLoading(false);
+		// 	}
+		// };
 
 		if (document.readyState === 'complete') {
-			handlePageLoad();
+			// handlePageLoad();
+
+			setLoading(false);
 		} else {
-			window.addEventListener('load', handlePageLoad);
-			return () => window.removeEventListener('load', handlePageLoad);
+			setLoading(true);
+			// window.addEventListener('load', handlePageLoad);
+			// return () => window.removeEventListener('load', handlePageLoad);
 		}
 	}, []);
 
 	return (
 		<div className="font-poppins relative overflow-x-hidden">
-            {loading && <Loading />}
+			{loading && <Loading />}
 			<header className="bg-[#a8c5c9] relative h-max pb-4 xs:pb-20 md:h-[700px] lg:h-[760px] 2xl:h-[820px]">
 				<nav className="flex justify-center text-white font-semibold py-1 sm:py-4 z-20">
 					<ul className="flex items-center gap-x-4">
@@ -245,7 +248,7 @@ export default function Example1() {
 							fill
 							sizes="100%"
 							objectFit="cover"
-                            priority
+							priority
 							style={{
 								objectPosition: '50% 20%',
 								clipPath: `${
@@ -319,7 +322,7 @@ export default function Example1() {
 							fill
 							sizes="100%"
 							objectFit="cover"
-                            priority
+							priority
 						/>
 					</div>
 				</div>
@@ -337,7 +340,7 @@ export default function Example1() {
 							fill
 							sizes="100%"
 							objectFit="cover"
-                            priority
+							priority
 						/>
 					</div>
 				</div>
