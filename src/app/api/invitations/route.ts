@@ -61,7 +61,6 @@ export async function POST(request: Request) {
 
 		return NextResponse.json({ success: true, invitationId: invitation.id });
 	} catch (error) {
-		console.error(error);
 		return NextResponse.json(
 			{ success: false, error: 'Database error' },
 			{ status: 500 }

@@ -102,11 +102,14 @@ const InvitationForm = ({ params }: { params: { id: string } }) => {
 			if (data.success) {
 				router.push(`/invitation/${data.invitationId}`);
 			} else {
-				alert('Failed to create invitation');
+				if (typeof window !== 'undefined') {
+					alert('Failed to create invitation');
+				}
 			}
 		} catch (error) {
-			console.error('Error:', error);
-			alert('Failed to save invitation');
+			if (typeof window !== 'undefined') {
+				alert('Failed to save invitation');
+			}
 		}
 	};
 
@@ -154,7 +157,6 @@ const InvitationForm = ({ params }: { params: { id: string } }) => {
 				</div>
 				<div className="mb-4">
 					<label className="block text-sm font-bold mb-2">Lokasi</label>
-					
 				</div>
 				<div className="mb-4">
 					<label className="block text-sm font-bold mb-2">Guests</label>

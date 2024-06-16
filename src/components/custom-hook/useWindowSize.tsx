@@ -15,16 +15,20 @@ function useWindowSize(): WindowSize {
 
 	useEffect(() => {
 		function handleResize() {
-			setWindowSize({
-				width: window.innerWidth,
-				height: window.innerHeight,
-			});
+			if (typeof window !== 'undefined') {
+				setWindowSize({
+					width: window.innerWidth,
+					height: window.innerHeight,
+				});
+			}
 		}
 
 		// Set size at the first client-side load
 		handleResize();
+		if (typeof window !== 'undefined') {
+			window.addEventListener('resize', handleResize);
+		}
 
-		window.addEventListener('resize', handleResize);
 		return () => window.removeEventListener('resize', handleResize);
 	}, []);
 
