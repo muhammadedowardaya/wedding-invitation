@@ -491,9 +491,10 @@ export default function Example1() {
 								name="message"
 								id="message"
 								onChange={(e) => handleChange(e, 'message')}
+                                value={formData.message}
 								className="resize-none h-14 xs:h-32 sm:h-48 focus-visible:outline-none mt-4 p-1 border border-slate-300"
 							>
-								{formData.message}
+								
 							</textarea>
 						</div>
 						<div className="flex justify-center items-center mt-8">
