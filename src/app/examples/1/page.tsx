@@ -41,6 +41,34 @@ import PlayButton from '@/components/PlayButton';
 const events = [
 	{
 		date: '29 March 2022',
+		description: 'Awal kenal manusia ini, karena video dia fyp di tiktok pak hehe...',
+		imageUrl: '/couple-images/couple-1.jpg',
+	},
+	{
+		date: '15 April 2022',
+		description: 'Our first date',
+		imageUrl: '/couple-images/couple-2.jpg',
+	},
+	{
+		date: '30 June 2022',
+		description: 'We traveled to Paris',
+		imageUrl: '/couple-images/couple-1.jpg',
+	},
+	{
+		date: '10 October 2022',
+		description: 'We got engaged',
+		imageUrl: '/couple-images/couple-2.jpg',
+	},
+	{
+		date: '25 December 2022',
+		description: 'We celebrated Idul Fitri together wkwk kocak',
+		imageUrl: '/couple-images/couple-1.jpg',
+	},
+];
+
+const myEvents = [
+	{
+		date: '29 March 2022',
 		description: 'We first met in New York City',
 		imageUrl: '/couple-images/couple-1.jpg',
 	},
@@ -71,7 +99,7 @@ const programs = [
 		title: 'Ceremony',
 		time: '12:00 AM',
 		description:
-			'1 Pico Blvd, Santa Monica, CA 90405 1 Pico Blvd, Santa Monica, CA 90405 1 Pico Blvd, Santa Monica, CA 90405',
+			'1 Pico Blvd, Santa Monica, CA 90405',
 		imageUrl: '/couple-images/couple-1.jpg',
 	},
 	{
@@ -273,8 +301,7 @@ export default function Example1() {
 						M Edo Wardaya
 					</h3>
 					<p className="2xl:text-justify">
-						Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dicta,
-						placeat.
+						Mahluk kasat mata yang sangat tamvan, dia juga seorang programmer.
 					</p>
 					<div className="w-full h-24 xs:h-60 2xl:h-80 px-4 xs:border-4 border-white relative">
 						<Image
@@ -291,8 +318,7 @@ export default function Example1() {
 						Tri Meliana Sari
 					</h3>
 					<p className="lg:order-3 2xl:text-justify">
-						Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto,
-						nostrum.
+						Makhluk Tuhan yang sangat cangtip, btw dia ownernya Meliana Flowers.
 					</p>
 					<div className="w-full h-24 xs:h-60 2xl:h-80 px-4 xs:border-4 border-white relative lg:order-1">
 						<Image

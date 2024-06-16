@@ -2,7 +2,6 @@
 // pages/invitationForm.tsx
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import LocationPicker from '@/components/LocationPicker';
 
 type Guest = {
 	id: number;
@@ -155,11 +154,7 @@ const InvitationForm = ({ params }: { params: { id: string } }) => {
 				</div>
 				<div className="mb-4">
 					<label className="block text-sm font-bold mb-2">Lokasi</label>
-					<LocationPicker
-						setLocation={setLocation}
-						searchTerm={searchTerm}
-						setSearchTerm={setSearchTerm}
-					/>
+					
 				</div>
 				<div className="mb-4">
 					<label className="block text-sm font-bold mb-2">Guests</label>
