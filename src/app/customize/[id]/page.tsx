@@ -22,10 +22,10 @@ const InvitationForm = ({ params }: { params: { id: string } }) => {
 	const router = useRouter();
 	const { id } = params;
 
-	const [location, setLocation] = useState<{ lat: number; lng: number }>({
-		lat: 0,
-		lng: 0,
-	});
+	// const [location, setLocation] = useState<{ lat: number; lng: number }>({
+	// 	lat: 0,
+	// 	lng: 0,
+	// });
 
 	const [formData, setFormData] = useState<FormData>({
 		brideName: '',
@@ -84,10 +84,10 @@ const InvitationForm = ({ params }: { params: { id: string } }) => {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
-		if (location.lat === 0 && location.lng === 0) {
-			alert('Please set a location.');
-			return;
-		}
+		// if (location.lat === 0 && location.lng === 0) {
+		// 	alert('Please set a location.');
+		// 	return;
+		// }
 
 		try {
 			const response = await fetch('/api/invitations', {
@@ -95,7 +95,7 @@ const InvitationForm = ({ params }: { params: { id: string } }) => {
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
 					...formData,
-					location: `Lat: ${location.lat}, Lng: ${location.lng}`,
+					// location: `Lat: ${location.lat}, Lng: ${location.lng}`,
 				}),
 			});
 			const data = await response.json();

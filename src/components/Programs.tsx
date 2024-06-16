@@ -1,4 +1,4 @@
-import Image from 'next/image';
+'use client';
 import ProgramItem from './ProgramItem';
 
 interface Program {

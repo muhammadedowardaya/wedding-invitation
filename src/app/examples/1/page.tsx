@@ -1,10 +1,8 @@
 'use client';
 
-import Programs from '@/components/Programs';
-import Timeline from '@/components/Timeline';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BiSolidQuoteAltLeft } from 'react-icons/bi';
 
 // for maps
@@ -12,7 +10,7 @@ import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 import '@/../leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import '@/styles/customIconMap.css';
-import useWindowSize from '@/components/custom-hook/useWindowSize';
+
 
 const customIcon = L.divIcon({
 	className: 'custom-marker-wrapper',
@@ -35,13 +33,16 @@ import 'swiper/css/free-mode';
 import 'swiper/css/scrollbar';
 // import required modules
 import { FreeMode, Scrollbar, Mousewheel } from 'swiper/modules';
-import { FaPlay } from 'react-icons/fa';
 import PlayButton from '@/components/PlayButton';
+import useWindowSize from '@/components/custom-hook/useWindowSize';
+import Timeline from '@/components/Timeline';
+import Programs from '@/components/Programs';
 
 const events = [
 	{
 		date: '29 March 2022',
-		description: 'Awal kenal manusia ini, karena video dia fyp di tiktok pak hehe...',
+		description:
+			'Awal kenal manusia ini, karena video dia fyp di tiktok pak hehe...',
 		imageUrl: '/couple-images/couple-1.jpg',
 	},
 	{
@@ -98,8 +99,7 @@ const programs = [
 	{
 		title: 'Ceremony',
 		time: '12:00 AM',
-		description:
-			'1 Pico Blvd, Santa Monica, CA 90405',
+		description: '1 Pico Blvd, Santa Monica, CA 90405',
 		imageUrl: '/couple-images/couple-1.jpg',
 	},
 	{
@@ -130,6 +130,7 @@ type FormData = {
 
 export default function Example1() {
 	const { width } = useWindowSize();
+	const [urlGoogleMaps, setUrlGoogleMaps] = useState('');
 	const [userLocation, setUserLocation] = useState<[number, number] | null>(
 		null
 	);
@@ -141,12 +142,18 @@ export default function Example1() {
 				const { latitude, longitude } = position.coords;
 				setUserLocation([latitude, longitude]);
 				const url = `https://www.google.com/maps/dir/?api=1&origin=${latitude},${longitude}&destination=${targetLocation[0]},${targetLocation[1]}&travelmode=driving`;
-				window.open(url, '_blank');
+				setUrlGoogleMaps(url);
 			});
 		} else {
 			alert('Geolocation is not supported by this browser.');
 		}
 	};
+
+	// useEffect(() => {
+	// 	if (typeof window !== 'undefined') {
+	// 		window.open(urlGoogleMaps, '_blank');
+	// 	}
+	// }, [urlGoogleMaps]);
 
 	const [formData, setFormData] = useState<FormData>({
 		name: '',
@@ -162,8 +169,6 @@ export default function Example1() {
 	) => {
 		setFormData({ ...formData, [field]: e.target.value });
 	};
-
-	
 
 	return (
 		<div className="font-poppins relative overflow-x-hidden">
@@ -655,9 +660,7 @@ export default function Example1() {
 					</h2>
 				</div>
 			</footer>
-			<PlayButton
-				audioFile='Sheila_On_7_-_Hingga_Ujung_Waktu__Lyrics_(128k).mp3'
-			/>
+			<PlayButton audioFile="Sheila_On_7_-_Hingga_Ujung_Waktu__Lyrics_(128k).mp3" />
 		</div>
 	);
 }

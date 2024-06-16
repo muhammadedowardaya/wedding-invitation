@@ -1,7 +1,7 @@
 'use client';
 
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 const GuestLink = ({
 	guest,
@@ -12,7 +12,9 @@ const GuestLink = ({
 	const [guestLink, setGuestLink] = useState('');
 
 	useEffect(() => {
-		setGuestLink(`${window.location.origin}/guest-invitation/${guest.id}`);
+		if (typeof window !== 'undefined') {
+			setGuestLink(`${window.location.origin}/guest-invitation/${guest.id}`);
+		}
 	}, [guest.id]);
 
 	const handleCopy = () => {
@@ -48,6 +50,5 @@ const GuestLink = ({
 		</li>
 	);
 };
-
 
 export default GuestLink;

@@ -1,4 +1,5 @@
-// components/Timeline.tsx
+'use client';
+
 import TimelineItem from './TimelineItem';
 
 interface Event {

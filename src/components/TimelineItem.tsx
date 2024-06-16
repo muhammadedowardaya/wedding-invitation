@@ -1,4 +1,5 @@
-// components/TimelineItem.tsx
+'use client';
+
 import Image from 'next/image';
 import useWindowSize from './custom-hook/useWindowSize';
 

@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useRef, useState } from 'react';
 import { FaArrowDown, FaArrowUp, FaPlay, FaStop } from 'react-icons/fa';
 import { HiMiniSpeakerWave, HiMiniSpeakerXMark } from 'react-icons/hi2';
@@ -97,7 +99,7 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 			e.currentTarget.classList.add('text-white');
 		}
 		setScrolling(false);
-        stopAutoScrolling();
+		stopAutoScrolling();
 		startScrolling('up');
 	};
 
@@ -109,7 +111,7 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 			e.currentTarget.classList.add('text-white');
 		}
 		setScrolling(false);
-        stopAutoScrolling();
+		stopAutoScrolling();
 		startScrolling('down');
 	};
 

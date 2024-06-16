@@ -1,3 +1,5 @@
+'use client';
+
 import GuestLink from '../GuestLink';
 
 export default function Template2Page({
