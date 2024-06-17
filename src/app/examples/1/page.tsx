@@ -164,22 +164,35 @@ export default function Example1() {
 		// 	}
 		// };
 
-		
-			// if (document.readyState === 'complete') {
-			// 	// handlePageLoad();
+		// if (document.readyState === 'complete') {
+		// 	// handlePageLoad();
 
-			// 	setLoading(false);
-			// } else {
-			// 	setLoading(true);
-			// 	// window.addEventListener('load', handlePageLoad);
-			// 	// return () => window.removeEventListener('load', handlePageLoad);
-			// }
+		// 	setLoading(false);
+		// } else {
+		// 	setLoading(true);
+		// 	// window.addEventListener('load', handlePageLoad);
+		// 	// return () => window.removeEventListener('load', handlePageLoad);
+		// }
 
-            document.addEventListener('DOMContentLoaded', () => {
-                setLoading(false);
-            });
-	
+		// Function to check document readiness
+		const checkDocumentReady = () => {
+			if (document.readyState === 'complete') {
+				setLoading(false);
+			} else {
+				setLoading(true);
+			}
+		};
 
+		// Initial check
+		checkDocumentReady();
+
+		// Event listener for state changes
+		document.addEventListener('readystatechange', checkDocumentReady);
+
+		// Cleanup event listener
+		return () => {
+			document.removeEventListener('readystatechange', checkDocumentReady);
+		};
 	}, []);
 
 	return (
