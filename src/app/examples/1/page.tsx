@@ -164,15 +164,22 @@ export default function Example1() {
 		// 	}
 		// };
 
-		if (document.readyState === 'complete') {
-			// handlePageLoad();
+		
+			// if (document.readyState === 'complete') {
+			// 	// handlePageLoad();
 
-			setLoading(false);
-		} else {
-			setLoading(true);
-			// window.addEventListener('load', handlePageLoad);
-			// return () => window.removeEventListener('load', handlePageLoad);
-		}
+			// 	setLoading(false);
+			// } else {
+			// 	setLoading(true);
+			// 	// window.addEventListener('load', handlePageLoad);
+			// 	// return () => window.removeEventListener('load', handlePageLoad);
+			// }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                setLoading(false);
+            });
+	
+
 	}, []);
 
 	return (
@@ -491,11 +498,9 @@ export default function Example1() {
 								name="message"
 								id="message"
 								onChange={(e) => handleChange(e, 'message')}
-                                value={formData.message}
+								value={formData.message}
 								className="resize-none h-14 xs:h-32 sm:h-48 focus-visible:outline-none mt-4 p-1 border border-slate-300"
-							>
-								
-							</textarea>
+							></textarea>
 						</div>
 						<div className="flex justify-center items-center mt-8">
 							<button
