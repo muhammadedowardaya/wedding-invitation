@@ -186,7 +186,7 @@ export default function Example1() {
 
 	return (
 		<div className="font-poppins relative overflow-hidden">
-			{/* {loading && <Loading />} */}
+			{loading && <Loading />}
 			<header className="bg-[#a8c5c9] relative h-max pb-4 xs:pb-20 md:h-[700px] lg:h-[760px] 2xl:h-[820px]">
 				<nav className="flex justify-center text-white font-semibold py-1 sm:py-4 z-20">
 					<ul className="flex items-center gap-x-4">
@@ -243,11 +243,11 @@ export default function Example1() {
 				</nav>
 				<section className="z-10 text-white flex flex-col items-center justify-center pt-5 xs:pt-10 md:pt-20 md:pb-80">
 					<h1 className="text-center text-sm xs:text-3xl md:text-5xl lg:text-6xl xl:text-7xl md:px-10 font-bold flex flex-col items-center w-[80%] md:w-[90%] px-8 gap-x-2 mb-4">
-						<p className="typing-effect">Muhammad Edo Wardaya</p>
-						<p className="typing-effect py-2">&</p>
-						<p className="typing-effect">Tri Meliana Sari</p>
+						<p className="animate-text-faded">Muhammad Edo Wardaya</p>
+						<p className="animate-text-faded py-2">&</p>
+						<p className="animate-text-faded">Tri Meliana Sari</p>
 					</h1>
-					<p className="font-dancing-script text-sm xs:text-3xl md:text-4xl lg:text-5xl xl:text-6xl">
+					<p className="animate-text-faded font-dancing-script text-sm xs:text-3xl md:text-4xl lg:text-5xl xl:text-6xl">
 						are getting married
 					</p>
 					<div className="relative mt-2 xs:mt-10 border-none md:border-4 w-20 h-20 xs:w-52 xs:h-52 sm:w-72 sm:h-72 md:w-[600px] md:h-[380px] lg:w-[700px] lg:h-[380px] 2xl:w-[800px] 2xl:h-[450px] border-white md:bg-slate-600">

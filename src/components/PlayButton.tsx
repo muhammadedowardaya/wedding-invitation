@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
 import '@/styles/mySwal2.css';
 import gsap from 'gsap';
 import { ScrollToPlugin } from 'gsap/all';
-import { animateTextFaded } from '@/utils/animated';
+import { animateTextFaded, animateTyping } from '@/utils/animated';
 
 interface PlayButtonProps {
 	className?: string;
@@ -88,7 +88,8 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 					/* Read more about isConfirmed, isDenied below */
 					if (result.isConfirmed) {
 						// Swal.fire('Audio sedang diputar', '', 'info');
-						animateTextFaded('.typing-effect');
+						animateTextFaded('.animate-text-faded');
+
 						setPlay(true);
 						setScrolling(true);
 						// audioRef.current?.play();
@@ -97,8 +98,14 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 						const handleScrollToggleTimeout = setTimeout(() => {
 							handleScrollToggle();
 							clearTimeout(handleScrollToggleTimeout);
-						}, 5000);
+						}, 7000);
 					} else if (result.isDenied) {
+						animateTextFaded('.animate-text-faded');
+
+						const handleScrollToggleTimeout = setTimeout(() => {
+							handleScrollToggle();
+							clearTimeout(handleScrollToggleTimeout);
+						}, 7000);
 						// Swal.fire('Audio tidak diputar', '', 'info');
 					}
 				});
@@ -291,7 +298,7 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 
 	return (
 		<div
-			className={`${className} z-[666] w-max h-max fixed bottom-4 left-[50%] -translate-x-[50%] sm:left-[unset] sm:right-0 sm:top-[50%] sm:-translate-y-[50%] bg-slate-200 py-2 px-4 sm:py-4 sm:px-2 flex sm:flex-col gap-6 sm:gap-4 md:gap-5 lg:gap-6 xl:gap-7 rounded-full`}
+			className={`${className} z-[777] w-max h-max fixed bottom-4 left-[50%] -translate-x-[50%] sm:left-[unset] sm:right-0 sm:top-[50%] sm:-translate-y-[50%] bg-slate-200 py-2 px-4 sm:py-4 sm:px-2 flex sm:flex-col gap-6 sm:gap-4 md:gap-5 lg:gap-6 xl:gap-7 rounded-full`}
 		>
 			<div
 				onClick={handlePlayPause}
