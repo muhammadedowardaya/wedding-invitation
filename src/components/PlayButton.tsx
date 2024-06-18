@@ -88,7 +88,7 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 					/* Read more about isConfirmed, isDenied below */
 					if (result.isConfirmed) {
 						// Swal.fire('Audio sedang diputar', '', 'info');
-                        animateTextFaded('.typing-effect');
+						animateTextFaded('.typing-effect');
 						setPlay(true);
 						setScrolling(true);
 						// audioRef.current?.play();
@@ -124,7 +124,7 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 		if (audioRef.current) {
 			if (play) {
 				audioRef.current.pause();
-                setPlay(false);
+				setPlay(false);
 			} else {
 				const playPromise = audioRef.current.play();
 				if (playPromise !== undefined) {
@@ -243,9 +243,43 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 		startScrolling('down', 200);
 	};
 
+	const handleUpTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+		if (!e.currentTarget.classList.contains('bg-[#a8c5c9]')) {
+			e.currentTarget.classList.remove('bg-white');
+			e.currentTarget.classList.remove('text-slate-700');
+			e.currentTarget.classList.add('bg-[#a8c5c9]');
+			e.currentTarget.classList.add('text-white');
+		}
+		setScrolling(false);
+		stopAutoScrolling();
+		startScrolling('up', 200);
+	};
+
+	const handleDownTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+		if (!e.currentTarget.classList.contains('bg-[#a8c5c9]')) {
+			e.currentTarget.classList.remove('bg-white');
+			e.currentTarget.classList.remove('text-slate-700');
+			e.currentTarget.classList.add('bg-[#a8c5c9]');
+			e.currentTarget.classList.add('text-white');
+		}
+		setScrolling(false);
+		stopAutoScrolling();
+		startScrolling('down', 200);
+	};
+
 	const handleMouseUpOrLeave = (
 		e: React.MouseEvent<HTMLDivElement, MouseEvent>
 	) => {
+		if (e.currentTarget.classList.contains('bg-[#a8c5c9]')) {
+			e.currentTarget.classList.remove('bg-[#a8c5c9]');
+			e.currentTarget.classList.remove('text-white');
+			e.currentTarget.classList.add('bg-white');
+			e.currentTarget.classList.add('text-slate-700');
+		}
+		stopScrolling();
+	};
+
+	const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
 		if (e.currentTarget.classList.contains('bg-[#a8c5c9]')) {
 			e.currentTarget.classList.remove('bg-[#a8c5c9]');
 			e.currentTarget.classList.remove('text-white');
@@ -292,6 +326,8 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 			) : (
 				<>
 					<div
+						onTouchStart={handleUpTouchStart}
+						onTouchEnd={handleTouchEnd}
 						onMouseDown={handleUpButtonMouseDown}
 						onMouseUp={handleMouseUpOrLeave}
 						onMouseLeave={handleMouseUpOrLeave}
@@ -300,6 +336,8 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 						<FaArrowUp className="w-full h-full" />
 					</div>
 					<div
+						onTouchStart={handleDownTouchStart}
+						onTouchEnd={handleTouchEnd}
 						onMouseDown={handleDownButtonMouseDown}
 						onMouseUp={handleMouseUpOrLeave}
 						onMouseLeave={handleMouseUpOrLeave}
