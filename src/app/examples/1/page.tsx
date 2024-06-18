@@ -20,6 +20,19 @@ import Programs from '@/components/Programs';
 
 import dynamic from 'next/dynamic';
 import Loading from '@/components/Loading';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/all';
+import ButterflyAnimation from '@/components/ButterflyAnimation';
+import { MotionPathPlugin } from 'gsap/all';
+import PathButterfly from '@/components/PathButterfly';
+import { Canvas } from '@react-three/fiber';
+import {
+	animateTextFaded,
+	animateTyping,
+	animatedElement,
+	animatedElements,
+} from '@/utils/animated';
+import TypingEffect from '@/components/TypingEffect';
 
 const MapInvitation = dynamic(() => import('@/components/MapInvitation'), {
 	ssr: false,
@@ -136,48 +149,11 @@ export default function Example1() {
 	};
 
 	useEffect(() => {
-		// const handlePageLoad = () => {
-		// 	const images = Array.from(document.images);
-		// 	let imagesLoaded = 0;
-
-		// 	images.forEach((img) => {
-		// 		if (img.complete) {
-		// 			imagesLoaded += 1;
-		// 		} else {
-		// 			img.onload = () => {
-		// 				imagesLoaded += 1;
-		// 				if (imagesLoaded === images.length) {
-		// 					setLoading(false);
-		// 				}
-		// 			};
-		// 			img.onerror = () => {
-		// 				imagesLoaded += 1;
-		// 				if (imagesLoaded === images.length) {
-		// 					setLoading(false);
-		// 				}
-		// 			};
-		// 		}
-		// 	});
-
-		// 	if (imagesLoaded === images.length) {
-		// 		setLoading(false);
-		// 	}
-		// };
-
-		// if (document.readyState === 'complete') {
-		// 	// handlePageLoad();
-
-		// 	setLoading(false);
-		// } else {
-		// 	setLoading(true);
-		// 	// window.addEventListener('load', handlePageLoad);
-		// 	// return () => window.removeEventListener('load', handlePageLoad);
-		// }
-
 		// Function to check document readiness
 		const checkDocumentReady = () => {
 			if (document.readyState === 'complete') {
 				setLoading(false);
+				// --------------------------------------
 			} else {
 				setLoading(true);
 			}
@@ -193,11 +169,24 @@ export default function Example1() {
 		return () => {
 			document.removeEventListener('readystatechange', checkDocumentReady);
 		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	useEffect(() => {
+		gsap.registerPlugin(ScrollTrigger);
+		animatedElements('#date .animasi');
+		animatedElements('#about-us .animasi');
+		animatedElements('#love-story .animasi');
+		animatedElements('#program .animasi');
+		animatedElements('#notes');
+		animatedElements('#contact .animasi');
+		animatedElements('#message .animasi');
+		animatedElements('#quotes .animasi');
 	}, []);
 
 	return (
-		<div className="font-poppins relative overflow-x-hidden">
-			{loading && <Loading />}
+		<div className="font-poppins relative overflow-hidden">
+			{/* {loading && <Loading />} */}
 			<header className="bg-[#a8c5c9] relative h-max pb-4 xs:pb-20 md:h-[700px] lg:h-[760px] 2xl:h-[820px]">
 				<nav className="flex justify-center text-white font-semibold py-1 sm:py-4 z-20">
 					<ul className="flex items-center gap-x-4">
@@ -254,9 +243,9 @@ export default function Example1() {
 				</nav>
 				<section className="z-10 text-white flex flex-col items-center justify-center pt-5 xs:pt-10 md:pt-20 md:pb-80">
 					<h1 className="text-center text-sm xs:text-3xl md:text-5xl lg:text-6xl xl:text-7xl md:px-10 font-bold flex flex-col items-center w-[80%] md:w-[90%] px-8 gap-x-2 mb-4">
-						<p>Muhammad Edo Wardaya</p>
-						<p className="py-2">&</p>
-						<p>Tri Meliana Sari</p>
+						<p className="typing-effect">Muhammad Edo Wardaya</p>
+						<p className="typing-effect py-2">&</p>
+						<p className="typing-effect">Tri Meliana Sari</p>
 					</h1>
 					<p className="font-dancing-script text-sm xs:text-3xl md:text-4xl lg:text-5xl xl:text-6xl">
 						are getting married
@@ -286,13 +275,13 @@ export default function Example1() {
 				className="text-center pt-8 px-10 pb-8 md:pt-40 md:pb-20 lg:pb-40 lg:pt-48 xl:pt-52 2xl:pt-56  flex flex-col items-center text-[#6c8ca3]"
 			>
 				<div className="">
-					<h2 className="text-base xs:text-3xl md:text-5xl lg:text-6xl font-bold">
+					<h2 className="animasi text-base xs:text-3xl md:text-5xl lg:text-6xl font-bold">
 						20 July 2024
 					</h2>
-					<p className="mt-2 font-dancing-script text-sm xs:text-xl md:text-3xl lg:text-4xl text-[#424f5a]">
+					<p className="animasi mt-2 font-dancing-script text-sm xs:text-xl md:text-3xl lg:text-4xl text-[#424f5a]">
 						in Santa Monica, California
 					</p>
-					<div className="flex justify-center xs:mt-10">
+					<div className="animasi flex justify-center xs:mt-10">
 						<Image
 							src="/assets/outline-flower.png"
 							alt="outline flower"
@@ -301,7 +290,7 @@ export default function Example1() {
 							className="w-[10rem] md:w-[20rem] lg:w-[30rem] mt-2 rotate-180"
 						/>
 					</div>
-					<div className="flex justify-center">
+					<div className="animasi flex justify-center">
 						<Image
 							src="/assets/save-the-date.png"
 							alt="outline flower"
@@ -310,7 +299,7 @@ export default function Example1() {
 							className="w-[10rem] md:w-[15rem] lg:w-[20rem]"
 						/>
 					</div>
-					<div className="flex justify-center">
+					<div className="animasi flex justify-center">
 						<Image
 							src="/assets/outline-flower.png"
 							alt="outline flower"
@@ -323,19 +312,23 @@ export default function Example1() {
 			</section>
 			<section
 				id="about-us"
-				className="bg-[#edf6f8] relative text-slate-600 grid gap-y-4 xs:gap-y-10 justify-center py-4 xs:py-10 px-4 xs:px-6 lg:py-0 lg:px-0 gap-x-40 md:gap-x-14 lg:gap-x-10 xl:gap-x-16"
+				className={`bg-[#edf6f8] relative text-slate-600 grid gap-y-4 xs:gap-y-10 justify-center py-4 xs:py-10 px-4 xs:px-6 lg:py-0 lg:px-0 gap-x-40 md:gap-x-14 lg:gap-x-10 xl:gap-x-16`}
 				style={{
 					gridTemplateColumns: `${width >= 1024 ? 'auto auto' : 'auto'}`,
 				}}
 			>
-				<div className="w-full mx-auto md:ml-auto sm:w-96 md:w-[400px] lg:relative 2xl:w-[500px] -bottom-20 flex flex-col gap-y-2 xs:gap-y-4">
-					<h3 className="font-dancing-script text-slate-800 text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl">
+				<div
+					className={`${
+						width >= 1024 ? '' : 'animasi'
+					} lg:col-start-2 w-full mx-auto md:ml-auto sm:w-96 md:w-[400px] lg:relative 2xl:w-[500px] -top-20 flex flex-col gap-y-2 xs:gap-y-4`}
+				>
+					<h3 className="lg:order-2 font-dancing-script text-slate-800 text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl">
 						M Edo Wardaya
 					</h3>
-					<p className="2xl:text-justify">
+					<p className="lg:order-3 2xl:text-justify">
 						Mahluk kasat mata yang sangat tamvan, dia juga seorang programmer.
 					</p>
-					<div className="w-full h-24 xs:h-60 2xl:h-80 px-4 xs:border-4 border-white relative">
+					<div className="lg:order-1 w-full h-24 xs:h-60 2xl:h-80 px-4 xs:border-4 border-white relative">
 						<Image
 							src="/couple-images/couple-1.jpg"
 							alt="ana's photo"
@@ -346,14 +339,18 @@ export default function Example1() {
 						/>
 					</div>
 				</div>
-				<div className="w-full mx-auto md:mr-auto sm:w-96 md:w-[400px] 2xl:w-[500px] lg:relative -top-20 flex flex-col gap-y-2 xs:gap-y-4">
-					<h3 className="font-dancing-script text-slate-800 lg:order-2 text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl">
+				<div
+					className={`${
+						width >= 1024 ? '' : 'animasi'
+					} lg:col-start-1 lg:row-start-1 w-full mx-auto md:mr-auto sm:w-96 md:w-[400px] 2xl:w-[500px] lg:relative -bottom-20 flex flex-col gap-y-2 xs:gap-y-4`}
+				>
+					<h3 className="font-dancing-script text-slate-800  text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl">
 						Tri Meliana Sari
 					</h3>
-					<p className="lg:order-3 2xl:text-justify">
+					<p className="2xl:text-justify">
 						Makhluk Tuhan yang sangat cangtip, btw dia ownernya Meliana Flowers.
 					</p>
-					<div className="w-full h-24 xs:h-60 2xl:h-80 px-4 xs:border-4 border-white relative lg:order-1">
+					<div className="w-full h-24 xs:h-60 2xl:h-80 px-4 xs:border-4 border-white relative">
 						<Image
 							src="/couple-images/couple-1.jpg"
 							alt="ana's photo"
@@ -370,10 +367,10 @@ export default function Example1() {
 				className="py-8 xs:py-16 px-10 md:pt-24 lg:pt-52 lg:pb-16 text-slate-600"
 			>
 				<div className="text-center mb-10 xs:mb-20 md:mb-36">
-					<h2 className="font-bold text-lg xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl mb-2">
+					<h2 className="animasi font-bold text-lg xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl mb-2">
 						OUR LOVE STORY
 					</h2>
-					<p className="font-dancing-script text-base xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl">
+					<p className="animasi font-dancing-script text-base xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl">
 						This is how it all started
 					</p>
 				</div>
@@ -384,17 +381,18 @@ export default function Example1() {
 				className="bg-[#edf6f8] text-slate-600 py-8 xs:py-16 md:py-24 lg:py-28 xl:py-36"
 			>
 				<div className="text-center mb-5 xs:mb-10 md:mb-20 lg:mb-32 xl:mb-40">
-					<h2 className="font-bold text-lg xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl mb-2">
+					<h2 className="animasi font-bold text-lg xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl mb-2">
 						WEDDING PROGRAM
 					</h2>
-					<p className="font-dancing-script text-base xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl">
+					<p className="animasi font-dancing-script text-base xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl">
 						We planned the day carefully
 					</p>
 				</div>
 				<Programs programs={programs} />
 			</section>
 			<div
-				className="
+				id="notes"
+				className=" animasi
                     h-[150px] w-full pl-2 pr-6 pb-6
                     xs:h-[350px] xs:pb-14 xs:px-14 xs:p-4
                     sm:px-20 md:pb-20 lg:pb-24 xl:pb-28
@@ -446,18 +444,18 @@ export default function Example1() {
 					</SwiperSlide>
 				</Swiper>
 			</div>
-			{/* form */}
+
 			<section id="contact" className="pt-14 px-0 xs:px-4 md:p-20">
 				<div className="bg-[#a8c5c9] pt-5 xs:pt-20 md:py-20 relative h-max md:h-[500px]">
-					<h2 className="text-center mx-auto w-[90%] text-base xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold text-white mb-2">
+					<h2 className="animasi text-center mx-auto w-[90%] text-base xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold text-white mb-2">
 						KINDLY RESPOND BY MAY
 					</h2>
-					<p className="text-center mx-auto w-[80%] font-dancing-script text-base xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl text-white">
+					<p className="animasi text-center mx-auto w-[80%] font-dancing-script text-base xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl text-white">
 						Will you share the joy with us?
 					</p>
 					<form
 						action=""
-						className="w-full md:w-[500px] lg:w-[600px] xl:w-[700px] mx-auto bg-white py-8 xs:py-12 px-4 md:px-10 mt-4 xs:mt-20 text-slate-500 relative md:border-b-[6px] border-[#f4e8e3]"
+						className="animasi w-full md:w-[500px] lg:w-[600px] xl:w-[700px] mx-auto bg-white py-8 xs:py-12 px-4 md:px-10 mt-4 xs:mt-20 text-slate-500 relative md:border-b-[6px] border-[#f4e8e3]"
 					>
 						<div className="relative">
 							<label
@@ -530,7 +528,8 @@ export default function Example1() {
 				<div className="h-0 md:h-[300px]"></div>
 			</section>
 			<div
-				className="
+				id="message"
+				className="animasi
                 h-[400px] xs:h-[450px] sm:h-[500px] md:h-[550px] lg:h-[600px] xl:h-[650px] w-full pr-6 
                 xs:pr-8 sm:px-16 md:px-28 lg:px-32 xl:px-36 2xl:px-40
                 pb-20 xs:pb-28 lg:pb-32 xl:pb-36 xs:pt-5 sm:pt-10 md:pt-5 lg:pt-20
@@ -635,7 +634,7 @@ export default function Example1() {
 					Whatever our souls are made of his and mine are the same
 				</h2>
 			</section>
-			<section id="location">
+			<section id="location" className="animasi">
 				<MapInvitation targetLocation={[-6.655007, 106.710826]} />
 			</section>
 			<footer className="p-8 flex justify-center items-center">

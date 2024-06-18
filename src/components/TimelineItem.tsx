@@ -21,7 +21,7 @@ const TimelineItem = ({
 	if (width >= 768) {
 		return (
 			<div
-				className="grid place-items-center mb-10 text-slate-600 gap-x-10"
+				className="animasi grid place-items-center mb-10 text-slate-600 gap-x-10"
 				style={{ gridTemplateColumns: '1fr auto 1fr' }}
 			>
 				{isImageLeft ? (
@@ -91,7 +91,7 @@ const TimelineItem = ({
 		);
 	} else {
 		return (
-			<div className="p-1 xs:p-4 flex flex-col items-center gap-y-2 xs:gap-y-4 justify-center text-center">
+			<div className="animasi p-1 xs:p-4 flex flex-col items-center gap-y-2 xs:gap-y-4 justify-center text-center">
 				<div className="">
 					<h3 className="font-bold text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl">{date}</h3>
 					<p className="">{description}</p>

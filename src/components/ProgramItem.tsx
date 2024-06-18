@@ -24,7 +24,7 @@ const ProgramItem = ({
 	if (width >= 768) {
 		return (
 			<div
-				className={`p-1 xs:p-3 bg-white text-slate-700 w-full sm:w-[28rem] md:w-80 lg:w-96 xl:w-[30rem] 2xl:w-[35rem] ${
+				className={`animasi p-1 xs:p-3 bg-white text-slate-700 w-full sm:w-[28rem] md:w-80 lg:w-96 xl:w-[30rem] 2xl:w-[35rem] ${
 					isItemRight ? 'mt-20 mr-auto' : 'mb-20 ml-auto'
 				}`}
 			>
@@ -81,7 +81,7 @@ const ProgramItem = ({
 		);
 	} else {
 		return (
-			<div className={`p-1 xs:p-3 bg-white text-slate-700 w-full sm:w-[28rem] md:w-80 lg:w-96 `}>
+			<div className={`animasi p-1 xs:p-3 bg-white text-slate-700 w-full sm:w-[28rem] md:w-80 lg:w-96 `}>
 				<div className="px-4 xs:px-0 w-full h-24 xs:h-60 relative">
 					<Image
 						src={imageUrl}

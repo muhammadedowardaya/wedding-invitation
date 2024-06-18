@@ -1,0 +1,11 @@
+.typing-effect {
+    position: relative; /* Ensure the element remains in the document flow */
+    display: inline-block; /* Ensure the element takes up only the necessary width */
+  }
+  .typing-effect span {
+    opacity: 0; /* Hide spans initially */
+    position: relative; /* Position the animated text relatively */
+    display: inline-block; /* Display spans in line */
+  }
+  
+  
