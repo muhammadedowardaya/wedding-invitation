@@ -14,6 +14,7 @@ import '@/styles/mySwal2.css';
 import gsap from 'gsap';
 import { ScrollToPlugin } from 'gsap/all';
 import { animateTextFaded, animateTyping } from '@/utils/animated';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
 
 interface PlayButtonProps {
 	className?: string;
@@ -21,6 +22,7 @@ interface PlayButtonProps {
 }
 
 export default function PlayButton({ className, audioFile }: PlayButtonProps) {
+	const dispatch = useAppDispatch();
 	const [play, setPlay] = useState(false);
 	const [scrolling, setScrolling] = useState(false);
 	const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -28,12 +30,14 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 	const scrollRef = useRef<HTMLDivElement | null>(null);
 	// const scrollIntervalRef = useRef<NodeJS.Timeout | null>(null);
 	const scrollIntervalRef = useRef<number | null>(null);
-	const autoScrollRef = useRef<number | null>(null);
-
-	const scrollTimeline = useRef(gsap.timeline());
-	const scrollAmountRef = useRef(0);
-
 	const [isBottom, setIsBottom] = useState(false);
+
+	const animateTextFadedDuration = useAppSelector(
+		(state) => state.animateTextFadedDuration.value
+	);
+	const [animateDuration, setAnimateDuration] = useState(
+		() => Math.ceil(animateTextFadedDuration) * 700
+	);
 
 	const handleScroll = () => {
 		if (typeof window !== 'undefined') {
@@ -41,6 +45,9 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 			const bodyOffsetHeight = document.body.offsetHeight;
 
 			setIsBottom(windowHeightPlusScrollY >= bodyOffsetHeight);
+			if (windowHeightPlusScrollY >= bodyOffsetHeight) {
+				stopScrolling();
+			}
 		}
 	};
 
@@ -58,11 +65,13 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 
 			// Initial check
 			handleScroll();
+			console.info(animateDuration);
 
 			return () => {
 				window.removeEventListener('scroll', handleScroll);
 			};
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	useEffect(() => {
@@ -88,7 +97,7 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 					/* Read more about isConfirmed, isDenied below */
 					if (result.isConfirmed) {
 						// Swal.fire('Audio sedang diputar', '', 'info');
-						animateTextFaded('.animate-text-faded');
+						animateTextFaded('.animate-text-faded', dispatch);
 
 						setPlay(true);
 						setScrolling(true);
@@ -98,14 +107,14 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 						const handleScrollToggleTimeout = setTimeout(() => {
 							handleScrollToggle();
 							clearTimeout(handleScrollToggleTimeout);
-						}, 7000);
+						}, animateDuration);
 					} else if (result.isDenied) {
-						animateTextFaded('.animate-text-faded');
+						animateTextFaded('.animate-text-faded', dispatch);
 
 						const handleScrollToggleTimeout = setTimeout(() => {
 							handleScrollToggle();
 							clearTimeout(handleScrollToggleTimeout);
-						}, 7000);
+						}, animateDuration);
 						// Swal.fire('Audio tidak diputar', '', 'info');
 					}
 				});
@@ -181,43 +190,13 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 		scrollStep();
 	};
 
-	const startAutoScrolling = (direction: 'up' | 'down') => {
-		if (isBottom) {
-			setScrolling(false);
-			stopAutoScrolling();
-		} else {
-			const scrollAmount = direction === 'up' ? -10 : 10; // slower scroll for auto
-			const scrollStep = () => {
-				gsap.to(window, {
-					scrollTo: { y: window.scrollY + scrollAmount, autoKill: false },
-					duration: 1,
-					ease: 'none',
-					// onComplete: () => {
-					// 	scrollIntervalRef.current = requestAnimationFrame(scrollStep);
-					// },
-				});
-				autoScrollRef.current = requestAnimationFrame(scrollStep);
-			};
-			stopAutoScrolling(); // Ensure no other interval is running
-			scrollStep();
-		}
-	};
-
 	const stopScrolling = () => {
 		if (scrollIntervalRef.current) {
 			// clearInterval(scrollIntervalRef.current);
+			setScrolling(false);
 			gsap.killTweensOf(window);
 			cancelAnimationFrame(scrollIntervalRef.current);
 			scrollIntervalRef.current = null;
-		}
-		// scrollTimeline.current.pause();
-	};
-
-	const stopAutoScrolling = () => {
-		if (autoScrollRef.current) {
-			gsap.killTweensOf(window);
-			cancelAnimationFrame(autoScrollRef.current);
-			autoScrollRef.current = null;
 		}
 		// scrollTimeline.current.pause();
 	};
@@ -232,7 +211,6 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 			e.currentTarget.classList.add('text-white');
 		}
 		setScrolling(false);
-		stopAutoScrolling();
 		startScrolling('up', 200);
 	};
 
@@ -246,7 +224,6 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 			e.currentTarget.classList.add('text-white');
 		}
 		setScrolling(false);
-		stopAutoScrolling();
 		startScrolling('down', 200);
 	};
 
@@ -258,7 +235,6 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 			e.currentTarget.classList.add('text-white');
 		}
 		setScrolling(false);
-		stopAutoScrolling();
 		startScrolling('up', 200);
 	};
 
@@ -270,7 +246,6 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 			e.currentTarget.classList.add('text-white');
 		}
 		setScrolling(false);
-		stopAutoScrolling();
 		startScrolling('down', 200);
 	};
 

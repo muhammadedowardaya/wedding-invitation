@@ -1,7 +1,13 @@
 import gsap from 'gsap';
 
 import './animated.css';
-const animatedElements = (selector: string) => {
+import { useAppDispatch } from '@/app/hooks';
+import { setDuration } from '@/features/animateTextFadedDuration/animateTextFadedDurationSlice';
+const animatedElements = (
+	selector: string,
+	endPositionElement: string = 'center',
+	endPositionView: string = '80%'
+) => {
 	const elements = document.querySelectorAll(selector);
 	elements.forEach((element) => {
 		gsap.fromTo(
@@ -19,7 +25,7 @@ const animatedElements = (selector: string) => {
 				scrollTrigger: {
 					trigger: element,
 					start: 'top bottom', // start animating when the top of the element hits the center of the viewport
-					end: 'center 80%', // end animating when the bottom of the element hits the center of the viewport
+					end: `${endPositionElement} ${endPositionView}`, // end animating when the bottom of the element hits the center of the viewport
 					scrub: 1, // smooth scrubbing with slight delay
 					toggleActions: 'play reverse play reverse', // onEnter, onLeave, onEnterBack, onLeaveBack
 				},
@@ -95,64 +101,64 @@ const animatedElement = (
 // };
 
 const animateTyping = (selector: string) => {
-    const elements = document.querySelectorAll(selector);
-    const timeline = gsap.timeline({ repeat: -1, repeatDelay: 2 }); // Repeat indefinitely with a delay
-  
-    elements.forEach((element) => {
-      const text = element.textContent || '';
-      const textLength = text.length;
-  
-      timeline.from(element, {
-        opacity: 0,
-        duration: 1,
-        onStart: function () {
-          // Clear the text content before starting the animation
-          element.textContent = '';
-        },
-      });
-  
-      // Typing animation
-      timeline.to(
-        element,
-        {
-          opacity: 1,
-          duration: textLength * 0.1, // Adjust the duration based on the length of the text
-          onUpdate: function () {
-            // Calculate the current progress of the animation
-            const progress = this.progress() * textLength;
-            // Update the text content of the element based on the progress
-            element.textContent = text.substring(0, Math.ceil(progress));
-          },
-          ease: 'ease-in',
-        },
-        '+=0.5' // Delay before starting the reverse animation
-      );
-  
-      // Reverse animation: animate back to empty text
-      timeline.to(
-        element,
-        {
-          opacity: 0,
-          duration: textLength * 0.1,
-          onUpdate: function () {
-            // Calculate the current progress of the animation
-            const progress = (1 - this.progress()) * textLength;
-            // Update the text content of the element based on the progress
-            element.textContent = text.substring(0, Math.ceil(progress));
-          },
-          ease: 'ease-out',
-        },
-        `+=${textLength * 0.1 + 0.5}` // Delay before starting the reverse animation
-      );
-    });
-  };
-  
+	const elements = document.querySelectorAll(selector);
+	const timeline = gsap.timeline({ repeat: -1, repeatDelay: 2 }); // Repeat indefinitely with a delay
 
-const animateTextFaded = (selector: string) => {
+	elements.forEach((element) => {
+		const text = element.textContent || '';
+		const textLength = text.length;
+
+		timeline.from(element, {
+			opacity: 0,
+			duration: 1,
+			onStart: function () {
+				// Clear the text content before starting the animation
+				element.textContent = '';
+			},
+		});
+
+		// Typing animation
+		timeline.to(
+			element,
+			{
+				opacity: 1,
+				duration: textLength * 0.1, // Adjust the duration based on the length of the text
+				onUpdate: function () {
+					// Calculate the current progress of the animation
+					const progress = this.progress() * textLength;
+					// Update the text content of the element based on the progress
+					element.textContent = text.substring(0, Math.ceil(progress));
+				},
+				ease: 'ease-in',
+			},
+			'+=0.5' // Delay before starting the reverse animation
+		);
+
+		// Reverse animation: animate back to empty text
+		timeline.to(
+			element,
+			{
+				opacity: 0,
+				duration: textLength * 0.1,
+				onUpdate: function () {
+					// Calculate the current progress of the animation
+					const progress = (1 - this.progress()) * textLength;
+					// Update the text content of the element based on the progress
+					element.textContent = text.substring(0, Math.ceil(progress));
+				},
+				ease: 'ease-out',
+			},
+			`+=${textLength * 0.1 + 0.5}` // Delay before starting the reverse animation
+		);
+	});
+};
+
+const animateTextFaded = (selector: string, dispatch?: any) => {
 	const elements = document.querySelectorAll(selector);
 	const timeline = gsap.timeline({ repeat: -1, repeatDelay: 2 }); // Create GSAP Timeline
 
 	let delay = 0;
+	let totalDuration = 0;
 
 	elements.forEach((element) => {
 		const text = element.textContent || '';
@@ -200,8 +206,10 @@ const animateTextFaded = (selector: string) => {
 		});
 	});
 
+	totalDuration = delay + 2; // Include additional delay before reverse animation
+
 	// Add a delay before starting the reverse animation
-	timeline.to({}, { duration: delay + 2 });
+	timeline.to({}, { duration: totalDuration });
 
 	// Reverse animation: animate each character to disappear sequentially
 	elements.forEach((element) => {
@@ -218,5 +226,11 @@ const animateTextFaded = (selector: string) => {
 			'-=0.2' // Reverse starts 0.2s earlier
 		);
 	});
+
+	if (dispatch) {
+		// Dispatch the total duration to Redux state
+		dispatch(setDuration(totalDuration));
+	}
 };
+
 export { animatedElements, animatedElement, animateTyping, animateTextFaded };

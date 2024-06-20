@@ -22,17 +22,8 @@ import dynamic from 'next/dynamic';
 import Loading from '@/components/Loading';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
-import ButterflyAnimation from '@/components/ButterflyAnimation';
-import { MotionPathPlugin } from 'gsap/all';
-import PathButterfly from '@/components/PathButterfly';
-import { Canvas } from '@react-three/fiber';
-import {
-	animateTextFaded,
-	animateTyping,
-	animatedElement,
-	animatedElements,
-} from '@/utils/animated';
-import TypingEffect from '@/components/TypingEffect';
+import { animatedElements } from '@/utils/animated';
+import StoreProvider from '@/app/StoreProvider';
 
 const MapInvitation = dynamic(() => import('@/components/MapInvitation'), {
 	ssr: false,
@@ -174,38 +165,32 @@ export default function Example1() {
 
 	useEffect(() => {
 		gsap.registerPlugin(ScrollTrigger);
-		animatedElements('#date .animasi');
-		animatedElements('#about-us .animasi');
-		animatedElements('#love-story .animasi');
-		animatedElements('#program .animasi');
-		animatedElements('#notes');
-		animatedElements('#contact .animasi');
-		animatedElements('#message .animasi');
-		animatedElements('#quotes .animasi');
+		animatedElements('#date .animasi','center');
+		animatedElements('#about-us .animasi','center');
+		animatedElements('#love-story .animasi', 'center', '90%');
+		animatedElements('#program .animasi','center');
+		animatedElements('#notes','center');
+		animatedElements('#contact .animasi','center');
+		animatedElements('#message .animasi','center');
+		animatedElements('#quotes .animasi','center');
 	}, []);
+
+	const handleNavLink = (e: any) => {
+		e.preventDefault();
+		const target = e.target.hash;
+		gsap.to(window, {
+			duration: 1,
+			scrollTo: target,
+		});
+	};
 
 	return (
 		<div className="font-poppins relative overflow-hidden">
 			{loading && <Loading />}
-			<header className="bg-[#a8c5c9] relative h-max pb-4 xs:pb-20 md:h-[700px] lg:h-[760px] 2xl:h-[820px]">
+			<header className="bg-[#a8c5c9] relative h-max pb-4 xs:pb-20 md:h-[750px] lg:h-[760px] 2xl:h-[820px]">
 				<nav className="flex justify-center text-white font-semibold py-1 sm:py-4 z-20">
 					<ul className="flex items-center gap-x-4">
-						<li className="hidden sm:block">
-							<Link href="#date" className="block px-4 py-1">
-								Date
-							</Link>
-						</li>
-						<li className="hidden sm:block">
-							<Link href="#about-us" className="block px-4 py-1">
-								About Us
-							</Link>
-						</li>
-						<li className="hidden sm:block">
-							<Link href="#love-story" className="block px-4 py-1">
-								Love Story
-							</Link>
-						</li>
-						<li className="block sm:hidden lg:block">
+						<li className="block">
 							<Link
 								href="#our"
 								className="flex flex-col items-center px-8 py-1 font-great-vibes text-gray-700"
@@ -224,24 +209,9 @@ export default function Example1() {
 								</div>
 							</Link>
 						</li>
-						<li className="hidden sm:block">
-							<Link href="#program" className="block px-4 py-1">
-								Program
-							</Link>
-						</li>
-						<li className="hidden sm:block">
-							<Link href="#contact" className="block px-4 py-1">
-								Contact
-							</Link>
-						</li>
-						<li className="hidden sm:block">
-							<Link href="#location" className="block px-4 py-1">
-								Location
-							</Link>
-						</li>
 					</ul>
 				</nav>
-				<section className="z-10 text-white flex flex-col items-center justify-center pt-5 xs:pt-10 md:pt-20 md:pb-80">
+				<section className="z-10 text-white flex flex-col items-center justify-center pt-5 xs:pt-10 md:pt-16 md:pb-80">
 					<h1 className="text-center text-sm xs:text-3xl md:text-5xl lg:text-6xl xl:text-7xl md:px-10 font-bold flex flex-col items-center w-[80%] md:w-[90%] px-8 gap-x-2 mb-4">
 						<p className="animate-text-faded">Muhammad Edo Wardaya</p>
 						<p className="animate-text-faded py-2">&</p>
@@ -637,7 +607,7 @@ export default function Example1() {
 			<section id="location" className="animasi">
 				<MapInvitation targetLocation={[-6.655007, 106.710826]} />
 			</section>
-			<footer className="p-8 flex justify-center items-center">
+			<footer className="p-8 flex justify-center items-center mb-20 sm:mb-14 lg:mb-28">
 				<div className="text-center mx-auto font-bold flex flex-col justify-center">
 					<Image
 						src="/icons/leaf.svg"
@@ -651,7 +621,86 @@ export default function Example1() {
 					</h2>
 				</div>
 			</footer>
-			<PlayButton audioFile="Sheila_On_7_-_Hingga_Ujung_Waktu__Lyrics_(128k).mp3" />
+			<StoreProvider>
+				<PlayButton audioFile="Sheila_On_7_-_Hingga_Ujung_Waktu__Lyrics_(128k).mp3" />
+			</StoreProvider>
+			<nav className="sm:flex hidden sm:fixed bottom-0 left-0 right-0 bg-[#a8c5c9] justify-center text-white font-semibold py-1 sm:py-4 z-[888]">
+				<ul className="flex items-center gap-x-4">
+					<li className="hidden sm:block">
+						<Link
+							href="#date"
+							className="block px-4 py-1"
+							onClick={handleNavLink}
+						>
+							Date
+						</Link>
+					</li>
+					<li className="hidden sm:block">
+						<Link
+							href="#about-us"
+							className="block px-4 py-1"
+							onClick={handleNavLink}
+						>
+							About Us
+						</Link>
+					</li>
+					<li className="hidden sm:block">
+						<Link
+							href="#love-story"
+							className="block px-4 py-1"
+							onClick={handleNavLink}
+						>
+							Love Story
+						</Link>
+					</li>
+					<li className="block sm:hidden lg:block">
+						<Link
+							href="#"
+							className="flex flex-col items-center px-8 py-1 font-great-vibes text-gray-700"
+						>
+							<div className="relative w-5 h-5 xs:w-10 xs:h-10">
+								<Image
+									src="/icons/leaf.svg"
+									alt="leaf icon"
+									fill
+									sizes="100%"
+									className="-rotate-[65deg] w-auto h-auto"
+								/>
+							</div>
+							<div className="text-sm sm:text-xl font-bold flex items-center gap-x-2">
+								E <span className="text-sm">&</span> M
+							</div>
+						</Link>
+					</li>
+					<li className="hidden sm:block">
+						<Link
+							href="#program"
+							className="block px-4 py-1"
+							onClick={handleNavLink}
+						>
+							Program
+						</Link>
+					</li>
+					<li className="hidden sm:block">
+						<Link
+							href="#contact"
+							className="block px-4 py-1"
+							onClick={handleNavLink}
+						>
+							Contact
+						</Link>
+					</li>
+					<li className="hidden sm:block">
+						<Link
+							href="#location"
+							className="block px-4 py-1"
+							onClick={handleNavLink}
+						>
+							Location
+						</Link>
+					</li>
+				</ul>
+			</nav>
 		</div>
 	);
 }
