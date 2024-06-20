@@ -107,14 +107,14 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 						const handleScrollToggleTimeout = setTimeout(() => {
 							handleScrollToggle();
 							clearTimeout(handleScrollToggleTimeout);
-						}, animateDuration);
+						}, Math.ceil(animateTextFadedDuration) * 700);
 					} else if (result.isDenied) {
 						animateTextFaded('.animate-text-faded', dispatch);
 
 						const handleScrollToggleTimeout = setTimeout(() => {
 							handleScrollToggle();
 							clearTimeout(handleScrollToggleTimeout);
-						}, animateDuration);
+						}, Math.ceil(animateTextFadedDuration) * 700);
 						// Swal.fire('Audio tidak diputar', '', 'info');
 					}
 				});
