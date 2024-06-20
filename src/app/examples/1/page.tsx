@@ -33,7 +33,7 @@ const events = [
 	{
 		date: '29 March 2022',
 		description:
-			'Awal kenal manusia ini, karena video dia fyp di tiktok pak hehe...',
+			'Awal kenal manusia ini, karena video dia fyp di tiktok_-...',
 		imageUrl: '/couple-images/couple-1.jpg',
 	},
 	{
@@ -53,7 +53,7 @@ const events = [
 	},
 	{
 		date: '25 December 2022',
-		description: 'We celebrated Idul Fitri together wkwk kocak',
+		description: 'We celebrated anniversary',
 		imageUrl: '/couple-images/couple-1.jpg',
 	},
 ];
