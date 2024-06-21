@@ -32,7 +32,7 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 	const scrollIntervalRef = useRef<number | null>(null);
 	const [isBottom, setIsBottom] = useState(false);
 
-	const animateTextFadedDuration = useAppSelector(
+	const animateTextFadedDuration: number = useAppSelector(
 		(state) => state.animateTextFadedDuration.value
 	);
 	const [animateDuration, setAnimateDuration] = useState(
@@ -57,6 +57,10 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 		}
 	};
 
+    useEffect(()=> {
+        setAnimateDuration(Math.ceil(animateTextFadedDuration) * 700);
+    },[animateTextFadedDuration])
+
 	useEffect(() => {
 		gsap.registerPlugin(ScrollToPlugin);
 
@@ -65,7 +69,6 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 
 			// Initial check
 			handleScroll();
-			console.info(animateDuration);
 
 			return () => {
 				window.removeEventListener('scroll', handleScroll);
@@ -103,18 +106,20 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 						setScrolling(true);
 						// audioRef.current?.play();
 						// startAutoScrolling('down');
+                        console.info(animateDuration);
+
 						handlePlayPause();
 						const handleScrollToggleTimeout = setTimeout(() => {
 							handleScrollToggle();
 							clearTimeout(handleScrollToggleTimeout);
-						}, Math.ceil(animateTextFadedDuration) * 700);
+						}, animateDuration);
 					} else if (result.isDenied) {
 						animateTextFaded('.animate-text-faded', dispatch);
 
 						const handleScrollToggleTimeout = setTimeout(() => {
 							handleScrollToggle();
 							clearTimeout(handleScrollToggleTimeout);
-						}, Math.ceil(animateTextFadedDuration) * 700);
+						}, animateDuration);
 						// Swal.fire('Audio tidak diputar', '', 'info');
 					}
 				});
