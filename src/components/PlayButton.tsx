@@ -106,7 +106,6 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 						setScrolling(true);
 						// audioRef.current?.play();
 						// startAutoScrolling('down');
-                        console.info(animateDuration);
 
 						handlePlayPause();
 						const handleScrollToggleTimeout = setTimeout(() => {
