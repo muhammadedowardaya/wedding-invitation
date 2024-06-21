@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
 import '@/styles/mySwal2.css';
 import gsap from 'gsap';
 import { ScrollToPlugin } from 'gsap/all';
-import { animateTextFaded, animateTyping } from '@/utils/animated';
+import { animateTextFaded } from '@/utils/animated';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 
 interface PlayButtonProps {
@@ -35,8 +35,9 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 	const animateTextFadedDuration: number = useAppSelector(
 		(state) => state.animateTextFadedDuration.value
 	);
-	const [animateDuration, setAnimateDuration] = useState(
-		() => Math.ceil(animateTextFadedDuration) * 700
+	const [animateDelay, setAnimateDelay] = useState(0);
+	const [animateTextFadedState, setAnimateTextFadedState] = useState(
+		gsap.timeline()
 	);
 
 	const handleScroll = () => {
@@ -57,14 +58,17 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 		}
 	};
 
-    useEffect(()=> {
-        setAnimateDuration(Math.ceil(animateTextFadedDuration) * 700);
-    },[animateTextFadedDuration])
+	useEffect(() => {
+		setAnimateDelay(Math.ceil(animateTextFadedDuration) * 700);
+	}, [dispatch, animateTextFadedDuration]);
 
 	useEffect(() => {
 		gsap.registerPlugin(ScrollToPlugin);
 
 		if (typeof window !== 'undefined') {
+			setAnimateTextFadedState(
+				animateTextFaded('.animate-text-faded', dispatch)
+			);
 			window.addEventListener('scroll', handleScroll);
 
 			// Initial check
@@ -99,34 +103,30 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 				}).then((result) => {
 					/* Read more about isConfirmed, isDenied below */
 					if (result.isConfirmed) {
-						// Swal.fire('Audio sedang diputar', '', 'info');
-						animateTextFaded('.animate-text-faded', dispatch);
-
-						setPlay(true);
-						setScrolling(true);
-						// audioRef.current?.play();
-						// startAutoScrolling('down');
-
+						animateTextFadedState.play();
 						handlePlayPause();
 						const handleScrollToggleTimeout = setTimeout(() => {
 							handleScrollToggle();
+							setPlay(true);
+							setScrolling(true);
 							clearTimeout(handleScrollToggleTimeout);
-						}, animateDuration);
+						}, animateDelay);
 					} else if (result.isDenied) {
-						animateTextFaded('.animate-text-faded', dispatch);
-
+						animateTextFadedState.play();
 						const handleScrollToggleTimeout = setTimeout(() => {
 							handleScrollToggle();
+							setScrolling(true);
 							clearTimeout(handleScrollToggleTimeout);
-						}, animateDuration);
-						// Swal.fire('Audio tidak diputar', '', 'info');
+						}, animateDelay);
 					}
 				});
 			}
 		};
 
 		// Initial check
-		checkDocumentReady();
+		if (animateDelay > 0) {
+			checkDocumentReady();
+		}
 
 		// Event listener for state changes
 		document.addEventListener('readystatechange', checkDocumentReady);
@@ -134,11 +134,9 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 		return () => {
 			document.removeEventListener('readystatechange', checkDocumentReady);
 			audioRef.current?.removeEventListener('ended', handleAudioEnd);
-			// stopScrolling();
-			// stopAutoScrolling();
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [audioFile]);
+	}, [audioFile, animateDelay]);
 
 	const handlePlayPause = () => {
 		if (audioRef.current) {
@@ -196,13 +194,11 @@ export default function PlayButton({ className, audioFile }: PlayButtonProps) {
 
 	const stopScrolling = () => {
 		if (scrollIntervalRef.current) {
-			// clearInterval(scrollIntervalRef.current);
 			setScrolling(false);
 			gsap.killTweensOf(window);
 			cancelAnimationFrame(scrollIntervalRef.current);
 			scrollIntervalRef.current = null;
 		}
-		// scrollTimeline.current.pause();
 	};
 
 	const handleUpButtonMouseDown = (

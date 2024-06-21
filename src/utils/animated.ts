@@ -155,7 +155,7 @@ const animateTyping = (selector: string) => {
 
 const animateTextFaded = (selector: string, dispatch?: any) => {
 	const elements = document.querySelectorAll(selector);
-	const timeline = gsap.timeline({ repeat: -1, repeatDelay: 2 }); // Create GSAP Timeline
+	const timeline = gsap.timeline({ repeat: -1, repeatDelay: 2 }).pause(); // Create GSAP Timeline
 
 	let delay = 0;
 	let totalDuration = 0;
@@ -231,6 +231,8 @@ const animateTextFaded = (selector: string, dispatch?: any) => {
 		// Dispatch the total duration to Redux state
 		dispatch(setDuration(totalDuration));
 	}
+
+	return timeline;
 };
 
 export { animatedElements, animatedElement, animateTyping, animateTextFaded };
