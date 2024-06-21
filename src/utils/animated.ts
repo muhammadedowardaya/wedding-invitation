@@ -165,20 +165,21 @@ const animateTextFaded = (selector: string, dispatch?: any) => {
 		element.textContent = ''; // Clear original text content
 
 		// Split text into words
-		const words = text.split(' ');
+		const words = text.split(' '); // ["Muhammad", "Edo", "Wardaya"]
 
 		words.forEach((word, wordIndex) => {
+			// Create wrapper for each word
 			const wordWrapper = document.createElement('span');
 			wordWrapper.className = 'word'; // Add class for styling
-			element.appendChild(wordWrapper);
 
 			// Split word into characters
-			const chars = word.split('');
+			const chars = word.split(''); // ["M", "u", "h", "a", "m", "m", "a", "d"]
 
-			chars.forEach((char, charIndex) => {
+			chars.forEach((char) => {
+				// Create span for each character
 				const charSpan = document.createElement('span');
 				charSpan.textContent = char;
-				wordWrapper.appendChild(charSpan);
+				wordWrapper.appendChild(charSpan); // Append character span to word wrapper
 
 				// Animate each character to appear sequentially
 				timeline.to(
@@ -194,13 +195,15 @@ const animateTextFaded = (selector: string, dispatch?: any) => {
 				delay += 0.1; // Stagger animation by 0.1s per character
 			});
 
+			// Append wordWrapper to element
+			element.appendChild(wordWrapper);
+
 			// Add extra delay between words
 			delay += 0.4; // Extra delay between words
 
-			// Append space after each word, except the last one
+			// Append a space after each word, except the last one
 			if (wordIndex < words.length - 1) {
-				const space = document.createElement('span');
-				space.innerHTML = '&nbsp;'; // Non-breaking space
+				const space = document.createTextNode(' ');
 				element.appendChild(space);
 			}
 		});

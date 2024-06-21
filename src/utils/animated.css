@@ -12,4 +12,5 @@
 .animate-text-faded .word {
 	display: inline-block;
 	opacity: 1;
+	white-space: nowrap;
 }
